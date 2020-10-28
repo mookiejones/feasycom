@@ -10,18 +10,19 @@ import java.util.List;
  */
 
 public class ActivityCollector {
-    public static List<Activity> activities=new ArrayList<>();
-    public static void addActivity(Activity activity){
+    public static List<Activity> activities = new ArrayList<>();
+
+    public static void addActivity(Activity activity) {
         activities.add(activity);
     }
 
-    public static Boolean removeActivity(Activity  activity){
+    public static Boolean removeActivity(Activity activity) {
         return activities.remove(activity);
     }
 
-    public static void finishAllActivity(){
-        for(Activity activity:activities){
-            if(!activity.isFinishing()){
+    public static void finishAllActivity() {
+        for (Activity activity : activities) {
+            if (!activity.isFinishing()) {
                 activity.finish();
             }
         }
@@ -29,7 +30,7 @@ public class ActivityCollector {
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 
-    public static int getCount(){
+    public static int getCount() {
         return activities.size();
     }
 }

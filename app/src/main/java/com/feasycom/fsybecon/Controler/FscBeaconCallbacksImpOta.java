@@ -1,10 +1,8 @@
 package com.feasycom.fsybecon.Controler;
 
 import android.bluetooth.BluetoothDevice;
-import android.util.Log;
 
 import com.feasycom.bean.CommandBean;
-import com.feasycom.controler.FscBeaconCallbacksImp;
 import com.feasycom.controler.FscSppApi;
 import com.feasycom.controler.FscSppCallbacksImp;
 import com.feasycom.fsybecon.Activity.UpgradeActivity;
@@ -25,7 +23,7 @@ public class FscBeaconCallbacksImpOta extends FscSppCallbacksImp {
 
     @Override
     public void otaProgressUpdate(final int percentage, int status) {
-        if(activityWeakReference.get() == null){
+        if (activityWeakReference.get() == null) {
             return;
         }
         if (status == FscSppApi.OTA_STATU_BEGIN) {
@@ -68,7 +66,7 @@ public class FscBeaconCallbacksImpOta extends FscSppCallbacksImp {
 
     @Override
     public void connectProgressUpdate(BluetoothDevice device, int status) {
-        if(activityWeakReference.get() == null){
+        if (activityWeakReference.get() == null) {
             return;
         }
         if (status == CommandBean.PASSWORD_CHECK) {
@@ -94,7 +92,7 @@ public class FscBeaconCallbacksImpOta extends FscSppCallbacksImp {
                 }
             });
             activityWeakReference.get().OTAFinish();
-        }else if(status == CommandBean.PASSWORD_TIME_OUT){
+        } else if (status == CommandBean.PASSWORD_TIME_OUT) {
             activityWeakReference.get().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -107,10 +105,10 @@ public class FscBeaconCallbacksImpOta extends FscSppCallbacksImp {
 
     @Override
     public void sppConnected(BluetoothDevice device) {
-        if(activityWeakReference.get() == null){
+        if (activityWeakReference.get() == null) {
             return;
         }
-        if(activityWeakReference.get().getPin()==null){
+        if (activityWeakReference.get().getPin() == null) {
             activityWeakReference.get().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

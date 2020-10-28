@@ -3,27 +3,19 @@ package com.feasycom.fsybecon.Activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.feasycom.controler.FscBleCentralApi;
-import com.feasycom.controler.FscBleCentralApiImp;
-import com.feasycom.controler.FscSppApi;
-import com.feasycom.controler.FscSppApiImp;
 import com.feasycom.fsybecon.R;
 import com.feasycom.fsybecon.Utils.SettingConfigUtil;
-
+import com.feasycom.controler.FscBleCentralApi;
+import com.feasycom.controler.FscSppApi;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +29,10 @@ import static android.view.View.GONE;
  */
 
 public class FilterDeviceActivity extends BaseActivity {
+    public static final String TAG = "FilterDeviceActivity";
+    public static SeekBar rssiSeekBar;
+    public static int filterValue = -100;
+    public static boolean isFilterEnable = false;
     @BindView(R.id.header_left)
     TextView headerLeft;
     @BindView(R.id.Search_Button)
@@ -45,25 +41,24 @@ public class FilterDeviceActivity extends BaseActivity {
     ImageView SetButton;
     @BindView(R.id.About_Button)
     ImageView AboutButton;
-
     @BindView(R.id.filter_switch)
     Switch filterSwitch;
     @BindView(R.id.min_rssi_text)
     TextView minRssiText;
     @BindView(R.id.rssi_value_text)
     TextView rssiValueText;
-    public static SeekBar rssiSeekBar;
-
     private FscBleCentralApi fscBleCentralApi;
     private FscSppApi fscSppApi;
-    public static int filterValue = -100;
-    public static boolean isFilterEnable = false;
-
     private Activity activity;
 
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, FilterDeviceActivity.class);
         context.startActivity(intent);
+    }
+
+    @Override
+    protected String getTag() {
+        return TAG;
     }
 
     @Override
@@ -83,10 +78,12 @@ public class FilterDeviceActivity extends BaseActivity {
     }
 
     @Override
-    public void initView() {}
+    public void initView() {
+
+    }
 
     @Override
-    public void onStart(){
+    public void onStart() {
 
         super.onStart();
 
@@ -97,25 +94,26 @@ public class FilterDeviceActivity extends BaseActivity {
         rssiSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {//监听进度条
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                rssiValueText.setText( ""+String.valueOf(progress-100) + " dB");
+                rssiValueText.setText("" + String.valueOf(progress - 100) + " dB");
                 filterValue = progress - 100;//让进度条初始值为-100
 
-                SettingConfigUtil.saveData(getApplicationContext(), "filter_value", filterValue+100);
+                SettingConfigUtil.saveData(getApplicationContext(), "filter_value", filterValue + 100);
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 int start = seekBar.getProgress();
-                rssiValueText.setText(String.valueOf(start-100) + " dB");
+                rssiValueText.setText(String.valueOf(start - 100) + " dB");
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 int end = seekBar.getProgress();
-                rssiValueText.setText(String.valueOf(end-100) + " dB");
+                rssiValueText.setText(String.valueOf(end - 100) + " dB");
             }
         });
     }
+
     @Override
     public void refreshHeader() {
         headerLeft.setText(getResources().getString(R.string.back));
@@ -133,7 +131,7 @@ public class FilterDeviceActivity extends BaseActivity {
                 && event.getRepeatCount() == 0) {
             MainActivity.actionStart(activity);
             finishActivity();
-            SettingConfigUtil.saveData(getApplicationContext(), "filter_value", filterValue+100);
+            SettingConfigUtil.saveData(getApplicationContext(), "filter_value", filterValue + 100);
         }
         return true;
     }
@@ -147,17 +145,17 @@ public class FilterDeviceActivity extends BaseActivity {
     /*监听过滤开关*/
     @OnCheckedChanged(R.id.filter_switch)
     public void rssiSwitch(CompoundButton v, boolean flag) {
-        if(flag) {
+        if (flag) {
             Log.i("switch", "rssiSwitch: 1");
             isFilterEnable = true;
 
-        }
-        else{
+        } else {
             Log.i("switch", "rssiSwitch: 0");
             isFilterEnable = false;
         }
         SettingConfigUtil.saveData(getApplicationContext(), "filter_switch", flag);
     }
+
     @OnClick(R.id.Set_Button)
     @Override
     public void setClick() {
@@ -174,6 +172,12 @@ public class FilterDeviceActivity extends BaseActivity {
     @Override
     public void searchClick() {
         MainActivity.actionStart(activity);
+        activity.finish();
+    }
+
+    @Override
+    public void sensorClick() {
+        SensorActivity.actionStart(activity);
         activity.finish();
     }
 /*

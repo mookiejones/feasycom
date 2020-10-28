@@ -28,7 +28,7 @@ public class IndexTitleImageView extends LinearLayout {
         indexView = (TextView) view.findViewById(R.id.index);
         titleView = (TextView) view.findViewById(R.id.title);
         iv = (ImageView) view.findViewById(R.id.image);
-        TypedArray ta=context.obtainStyledAttributes(attrs,R.styleable.IndexTitleImageView);
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.IndexTitleImageView);
         Drawable src = ta.getDrawable(R.styleable.IndexTitleImageView_imgSrc);
 
         String title = attrs.getAttributeValue(nameSpace, "title");
@@ -38,10 +38,12 @@ public class IndexTitleImageView extends LinearLayout {
         setIndex(index);
         setTitle(title);
     }
-    public void setIndex(String index){
+
+    public void setIndex(String index) {
         indexView.setText(index);
     }
-    public void setTitle(String title){
+
+    public void setTitle(String title) {
         titleView.setText(title);
     }
 }

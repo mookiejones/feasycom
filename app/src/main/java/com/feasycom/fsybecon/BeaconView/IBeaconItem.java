@@ -35,6 +35,7 @@ public class IBeaconItem extends RelativeLayout {
 
     /**
      * display ibeaconData
+     *
      * @param iBeacon
      */
     public void setIBeaconValue(Ibeacon iBeacon) {

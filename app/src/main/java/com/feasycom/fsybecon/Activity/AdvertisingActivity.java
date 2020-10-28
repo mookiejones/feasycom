@@ -1,10 +1,10 @@
 package com.feasycom.fsybecon.Activity;
 
 import android.app.Activity;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.Handler;
+
 import com.feasycom.fsybecon.R;
 
 /**
@@ -12,22 +12,28 @@ import com.feasycom.fsybecon.R;
  */
 
 public class AdvertisingActivity extends BaseActivity {
-    private Handler handler=new Handler();
+    public static final String TAG = "AdvertisingActivity";
+    private Handler handler = new Handler();
     private Activity activity;
+
+    @Override
+    protected String getTag() {
+        return TAG;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advertising);
 
 
-        activity=this;
+        activity = this;
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(isFirstIn()){
+                if (isFirstIn()) {
                     GuideActivity.actionStart(activity);
-                }
-                else{
+                } else {
                     MainActivity.actionStart(activity);
                 }
                 activity.finish();
@@ -43,8 +49,7 @@ public class AdvertisingActivity extends BaseActivity {
             editor.putBoolean("isFirstIn", false);
             editor.commit();
             return true;
-        }
-        else{
+        } else {
             editor.commit();
             return false;
         }
@@ -78,6 +83,11 @@ public class AdvertisingActivity extends BaseActivity {
 
     @Override
     public void searchClick() {
+
+    }
+
+    @Override
+    public void sensorClick() {
 
     }
 

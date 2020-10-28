@@ -9,14 +9,15 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.feasycom.bean.BeaconBean;
-import com.feasycom.controler.FscBeaconApi;
-import com.feasycom.controler.FscBeaconApiImp;
+
 import com.feasycom.fsybecon.BeaconView.AltBeaconView;
 import com.feasycom.fsybecon.BeaconView.Eddystone_UIDView;
 import com.feasycom.fsybecon.BeaconView.Eddystone_URLView;
 import com.feasycom.fsybecon.BeaconView.iBeaconView;
 import com.feasycom.fsybecon.R;
+import com.feasycom.bean.BeaconBean;
+import com.feasycom.controler.FscBeaconApi;
+import com.feasycom.controler.FscBeaconApiImp;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,11 +26,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
+
 /**
  * Copyright 2017 Shenzhen Feasycom Technology co.,Ltd
  */
 
 public class AddBeaconActivity extends BaseActivity {
+    public static final int REQUEST_BEACON_ADD_OK = 2;
+    private static final String TAG = "AddBeaconActivity";
     @BindView(R.id.header_left)
     TextView headerLeft;
     @BindView(R.id.header_title)
@@ -57,7 +61,6 @@ public class AddBeaconActivity extends BaseActivity {
     private List<String> beaconTypelist;
     private ArrayAdapter<String> spinnerAdapter;
     private BeaconBean beaconBean;
-    public static final int REQUEST_BEACON_ADD_OK = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +102,11 @@ public class AddBeaconActivity extends BaseActivity {
         headerRight.setText(getResources().getString(R.string.add_beacon_right));
     }
 
+    @Override
+    protected String getTag() {
+        return TAG;
+    }
+
     public void refreshFooter() {
         //footer image src init
         SetButton.setImageResource(R.drawable.setting_on);
@@ -121,6 +129,13 @@ public class AddBeaconActivity extends BaseActivity {
     public void searchClick() {
         fscBeaconApi.disconnect();
         MainActivity.actionStart(activity);
+        activity.finish();
+    }
+
+    @Override
+    public void sensorClick() {
+        fscBeaconApi.disconnect();
+        SensorActivity.actionStart(activity);
         activity.finish();
     }
 

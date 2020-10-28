@@ -1,8 +1,6 @@
 package com.feasycom.fsybecon.Widget;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +25,7 @@ import butterknife.OnTextChanged;
  */
 public class PinDialog extends BaseDialog {
 
+    private static final String TAG = "PinDialog";
 
     private final Context context;
     @BindView(R.id.input_pin)
@@ -57,7 +56,7 @@ public class PinDialog extends BaseDialog {
         ButterKnife.bind(this);
         setCanceledOnTouchOutside(false);
         yes.setEnabled(false);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE|WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
     @OnTextChanged(R.id.input_pin)
@@ -81,6 +80,7 @@ public class PinDialog extends BaseDialog {
         be.setObject("pin", pinString);
         be.setObject("position", position);
         EventBus.getDefault().post(be);
+        inputPin.setText("");
     }
 
     @Override
@@ -89,11 +89,10 @@ public class PinDialog extends BaseDialog {
     }
 
 
-
-
     @Override
     @OnClick(R.id.no)
     public void dismiss() {
+        inputPin.setText("");
         super.dismiss();
     }
 

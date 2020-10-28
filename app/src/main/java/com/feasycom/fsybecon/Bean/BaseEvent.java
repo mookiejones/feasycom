@@ -8,24 +8,28 @@ import java.util.HashMap;
  */
 
 public class BaseEvent implements Serializable {
-    public static final int  DELE_BEACON_EVENT=1;
-    public static final int  OTA_EVENT_YES=2;
-    public static final int  OTA_EVENT_NO=3;
-    public static final int  PIN_EVENT=4;
+    public static final int DELE_BEACON_EVENT = 1;
+    public static final int OTA_EVENT_YES = 2;
+    public static final int OTA_EVENT_NO = 3;
+    public static final int PIN_EVENT = 4;
 
     private int eventId;
     private String index;
-    private HashMap<String,Object> hm=new HashMap<String,Object>();
+    private HashMap<String, Object> hm = new HashMap<String, Object>();
+
     public BaseEvent(int evenid) {
-        this.eventId=evenid;
+        this.eventId = evenid;
     }
-    public BaseEvent(String index,int evenid) {
+
+    public BaseEvent(String index, int evenid) {
         this.index = index;
-        this.eventId=evenid;
+        this.eventId = evenid;
     }
+
     public String getIndex() {
         return index;
     }
+
     public void setIndex(String index) {
         this.index = index;
     }
@@ -38,10 +42,11 @@ public class BaseEvent implements Serializable {
         this.eventId = eventId;
     }
 
-    public void  setObject(String key,Object value){
-        hm.put(key,value);
+    public void setObject(String key, Object value) {
+        hm.put(key, value);
     }
-    public Object getObject(String key){
+
+    public Object getObject(String key) {
         return hm.get(key);
     }
 }

@@ -1,11 +1,7 @@
 package com.feasycom.fsybecon.Controler;
 
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGatt;
-
 import com.feasycom.bean.BluetoothDeviceWrapper;
 import com.feasycom.controler.FscBeaconCallbacksImp;
-import com.feasycom.fsybecon.Activity.MainActivity;
 import com.feasycom.fsybecon.Activity.ParameterSettingActivity;
 import com.feasycom.fsybecon.Activity.SetActivity;
 
@@ -18,6 +14,8 @@ import static com.feasycom.fsybecon.Activity.SetActivity.OPEN_TEST_MODE;
  */
 
 public class FscBeaconCallbacksImpSet extends FscBeaconCallbacksImp {
+
+    private static final String TAG = "FscBeaconCallbacksImpSe";
     private WeakReference<SetActivity> weakReference;
     private boolean testDeviceFound = false;
 
@@ -27,6 +25,7 @@ public class FscBeaconCallbacksImpSet extends FscBeaconCallbacksImp {
 
     @Override
     public void blePeripheralFound(BluetoothDeviceWrapper device, int rssi, byte[] record) {
+
         /**
          * BLE search speed is fast,please pay attention to the life cycle of the device object ,directly use the final type here
          */

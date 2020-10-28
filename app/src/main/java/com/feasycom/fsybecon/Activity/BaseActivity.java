@@ -2,12 +2,11 @@ package com.feasycom.fsybecon.Activity;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import com.feasycom.controler.FscBeaconApiImp;
-import com.feasycom.controler.FscSppApiImp;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.feasycom.fsybecon.Controler.ActivityCollector;
 
 /**
@@ -16,6 +15,13 @@ import com.feasycom.fsybecon.Controler.ActivityCollector;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
+
+    abstract String getTag();
+
+    protected void Log(String message) {
+        Log.e(getTag(), message);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //强制竖屏
@@ -23,6 +29,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         //干掉 activity 切换特效
 //        overridePendingTransition(0, 0);
         super.onCreate(savedInstanceState);
+        Log.e("activity", getClass().getSimpleName());
 //        Log.d("activity", getClass().getSimpleName());
 //        Log.i("onCreat", getClass().getSimpleName());
         ActivityCollector.addActivity(this);
@@ -83,6 +90,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     public abstract void aboutClick();
 
     public abstract void searchClick();
+
+    public abstract void sensorClick();
 
 
     public void finishActivity() {

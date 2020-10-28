@@ -5,7 +5,6 @@ import android.text.Editable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,16 +15,12 @@ import com.feasycom.fsybecon.R;
 import com.feasycom.fsybecon.Utils.ViewUtil;
 import com.feasycom.fsybecon.Widget.DeleteDialog;
 import com.feasycom.fsybecon.Widget.SwitchButton;
-import com.feasycom.fsybecon.Widget.ToggleButton;
-import com.feasycom.util.LogUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import butterknife.OnTouch;
-
-import static com.feasycom.fsybecon.Activity.ParameterSettingActivity.firstEnter;
 
 /**
  * Copyright 2017 Shenzhen Feasycom Technology co.,Ltd
@@ -70,7 +65,7 @@ public class AltBeaconView extends LinearLayout {
 
     public AltBeaconView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.context =context;
+        this.context = context;
         View view = View.inflate(context, R.layout.altbeacon_parameter_setting, this);
         ButterKnife.bind(view);
     }
@@ -83,6 +78,10 @@ public class AltBeaconView extends LinearLayout {
         if (null == mBeacon) {
             this.mBeacon = beacon;
             altBeaconPower.addTextChangedListener(new ViewUtil.PowerTextWatcher(altBeaconPowerLabel, altBeaconPower, mBeacon));
+
+            beaconEnable.toggleSwitch(true);
+            mBeacon.setEnable(true);
+
             beaconEnable.setOnStateChangedListener(new SwitchButton.OnStateChangedListener() {
 
                 @Override
@@ -115,8 +114,7 @@ public class AltBeaconView extends LinearLayout {
         altBeaconPower.setText(beacon.getPower());
         altBeaconPower.addTextChangedListener(new ViewUtil.PowerTextWatcher(altBeaconPowerLabel, altBeaconPower, mBeacon));
 
-        //beaconEnable.setOpened(beacon.isEnable());
-        beaconEnable.setOpened(true);
+        beaconEnable.setOpened(beacon.isEnable());
         beaconEnable.setOnStateChangedListener(new SwitchButton.OnStateChangedListener() {
 
             @Override
@@ -135,29 +133,34 @@ public class AltBeaconView extends LinearLayout {
     }
 
     public void setIndex(String temp) {
-        beaconIndex.setText(temp);
+        beaconIndex.setText("3333");
+        // beaconIndex.setText(temp);
     }
 
     public void setTitle() {
-        beaconTitle.setText("iBeacon");
+        beaconTitle.setText("3333");
+        // beaconTitle.setText("iBeacon");
     }
 
     public void setUuid(String temp) {
-        altBeaconID1.setText(temp);
+        altBeaconID1.setText("3333");
+        // altBeaconID1.setText(temp);
     }
 
     public void setMajor(String temp) {
-        altBeaconID2.setText(temp);
+        altBeaconID2.setText("3333");
+        // altBeaconID2.setText(temp);
     }
 
     public void setMinor(String temp) {
-        altBeaconID3.setText(temp);
+        altBeaconID3.setText("3333");
+        // altBeaconID3.setText(temp);
     }
 
     public void setTxpower(String temp) {
-        altBeaconPower.setText(temp);
+        altBeaconPower.setText("3333");
+        // altBeaconPower.setText(temp);
     }
-
 
     @OnClick(R.id.image)
     public void deleteBeacon() {
@@ -171,7 +174,7 @@ public class AltBeaconView extends LinearLayout {
     @OnTextChanged(R.id.altBeacon_id_2)
     public void afterTextChangedMajor(Editable s) {
         String value = s.toString().toLowerCase();
-        if (value.length()==4) {
+        if (value.length() == 4) {
             ViewUtil.setLabelEditBlock(altBeaconID2, altBeaconMajorLabel);
             mBeacon.setId2(value);
         } else {
@@ -185,7 +188,7 @@ public class AltBeaconView extends LinearLayout {
     @OnTextChanged(R.id.altBeacon_id_3)
     public void afterTextChangedMinor(Editable s) {
         String value = s.toString().toLowerCase();
-        if (value.length()==4) {
+        if (value.length() == 4) {
             ViewUtil.setLabelEditBlock(altBeaconID3, altBeaconMinorLabel);
             mBeacon.setId3(value);
         } else {
@@ -209,12 +212,14 @@ public class AltBeaconView extends LinearLayout {
             ViewUtil.setLabelEditRed(altBeaconID1, altBeaconUuidLabel);
         }
     }
+
     /**
      * manufacturer id limit 0-9  decimal
+     *
      * @param s
      */
     @OnTextChanged(R.id.altBeacon_manufacture_id)
-    public void afterTextChangeManufactureId(Editable s){
+    public void afterTextChangeManufactureId(Editable s) {
         String value = s.toString().toLowerCase();
         if (value.length() > 0 && value.length() <= 5 && Integer.valueOf(value).intValue() <= 65535) {
             ViewUtil.setLabelEditBlock(altBeaconManufactureId, altBeaconManufactureIdLabel);
@@ -244,28 +249,31 @@ public class AltBeaconView extends LinearLayout {
     /**
      * make sure the cursor is always on the right
      */
-    @OnTouch({R.id.altBeacon_id_1, R.id.altBeacon_id_2, R.id.altBeacon_id_3, R.id.altBeacon_power,R.id.altBeacon_manufacture_reserved,R.id.altBeacon_manufacture_id})
+    @OnTouch({R.id.altBeacon_id_1, R.id.altBeacon_id_2, R.id.altBeacon_id_3, R.id.altBeacon_power, R.id.altBeacon_manufacture_reserved, R.id.altBeacon_manufacture_id})
     public boolean touchListener(EditText v, MotionEvent event) {
-        EditText e = (EditText) v;
-        e.requestFocus();
-        e.setSelection(e.getText().length());
-        if (event.getAction() == MotionEvent.ACTION_MOVE) {
-        } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-        } else if (event.getAction() == MotionEvent.ACTION_UP) {
-        }else if (event.getAction() == MotionEvent.ACTION_CANCEL){
-//            if (firstEnter) {
-//                firstEnter = false;
-//                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-//                imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
-//            }
-        }
+//        EditText e = (EditText) v;
+//        e.requestFocus();
+//        e.setSelection(e.getText().length());
+//        if (event.getAction() == MotionEvent.ACTION_MOVE) {
+//        } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+//        } else if (event.getAction() == MotionEvent.ACTION_CANCEL) {
+////            if (firstEnter) {
+////                firstEnter = false;
+//            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+//            imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
+////            }
+//        }
         return false;
     }
 
-    @OnClick({R.id.altBeacon_id_1, R.id.altBeacon_id_2, R.id.altBeacon_id_3, R.id.altBeacon_power,R.id.altBeacon_manufacture_reserved,R.id.altBeacon_manufacture_id})
+    @OnClick({R.id.altBeacon_id_1, R.id.altBeacon_id_2, R.id.altBeacon_id_3, R.id.altBeacon_power, R.id.altBeacon_manufacture_reserved, R.id.altBeacon_manufacture_id})
     public void clickListener(EditText v) {
-        EditText e = (EditText) v;
-        e.requestFocus();
-        e.setSelection(e.getText().length());
+//        EditText e = (EditText) v;
+//        e.requestFocus();
+//        e.setSelection(e.getText().length());
+
+        v.setCursorVisible(false);
+        v.setCursorVisible(true);
     }
 }

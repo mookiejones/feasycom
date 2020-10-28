@@ -46,40 +46,21 @@ public class SwitchButton extends View {
     private final Path bPath = new Path();
 
     private final RectF bRectF = new RectF();
-
-    private float sAnim, bAnim;
-
-    private RadialGradient shadowGradient;
-
-
     protected float ratioAspect = 0.68f; // (0,1]
-
     protected float animationSpeed = 0.1f; // (0,1]
-
-
-    private int state;
-
-    private int lastState;
-
-    private boolean isCanVisibleDrawing = false;
-
-    private OnClickListener mOnClickListener;
-
     protected int colorPrimary;
-
     protected int colorPrimaryDark;
-
     protected int colorOff;
-
     protected int colorOffDark;
-
     protected int colorShadow;
-
     protected boolean hasShadow;
-
     protected boolean isOpened;
-
-
+    private float sAnim, bAnim;
+    private RadialGradient shadowGradient;
+    private int state;
+    private int lastState;
+    private boolean isCanVisibleDrawing = false;
+    private OnClickListener mOnClickListener;
     private float sRight;
 
     private float sCenterX, sCenterY;
@@ -101,6 +82,26 @@ public class SwitchButton extends View {
 
 
     private float shadowReservedHeight;
+    private OnStateChangedListener listener = new OnStateChangedListener() {
+
+        @Override
+
+        public void toggleToOn(SwitchButton view) {
+
+            toggleSwitch(true);
+
+        }
+
+
+        @Override
+
+        public void toggleToOff(SwitchButton view) {
+
+            toggleSwitch(false);
+
+        }
+
+    };
 
 
     public SwitchButton(Context context) {
@@ -179,20 +180,17 @@ public class SwitchButton extends View {
 
     }
 
-
     public void setColor(int newColorPrimary, int newColorPrimaryDark) {
 
         setColor(newColorPrimary, newColorPrimaryDark, colorOff, colorOffDark);
 
     }
 
-
     public void setColor(int newColorPrimary, int newColorPrimaryDark, int newColorOff, int newColorOffDark) {
 
         setColor(newColorPrimary, newColorPrimaryDark, newColorOff, newColorOffDark, colorShadow);
 
     }
-
 
     public void setColor(int newColorPrimary, int newColorPrimaryDark, int newColorOff, int newColorOffDark, int newColorShadow) {
 
@@ -210,7 +208,6 @@ public class SwitchButton extends View {
 
     }
 
-
     public void setShadow(boolean shadow) {
 
         hasShadow = shadow;
@@ -219,13 +216,11 @@ public class SwitchButton extends View {
 
     }
 
-
     public boolean isOpened() {
 
         return isOpened;
 
     }
-
 
     public void setOpened(boolean isOpened) {
 
@@ -240,7 +235,6 @@ public class SwitchButton extends View {
         refreshState(wishState);
 
     }
-
 
     public void toggleSwitch(boolean isOpened) {
 
@@ -266,7 +260,6 @@ public class SwitchButton extends View {
 
     }
 
-
     private void refreshState(int newState) {
 
         if (!isOpened && newState == STATE_SWITCH_ON) {
@@ -286,7 +279,6 @@ public class SwitchButton extends View {
         postInvalidate();
 
     }
-
 
     @Override
 
@@ -342,7 +334,6 @@ public class SwitchButton extends View {
         setMeasuredDimension(resultWidth, resultHeight);
 
     }
-
 
     @Override
 
@@ -489,7 +480,6 @@ public class SwitchButton extends View {
 
     }
 
-
     private void calcBPath(float percent) {
 
         bPath.reset();
@@ -509,7 +499,6 @@ public class SwitchButton extends View {
         bPath.close();
 
     }
-
 
     private float calcBTranslate(float percent) {
 
@@ -606,7 +595,6 @@ public class SwitchButton extends View {
         return result - bOffLeftX;
 
     }
-
 
     @Override
 
@@ -708,7 +696,6 @@ public class SwitchButton extends View {
 
     }
 
-
     @Override
 
     public boolean onTouchEvent(MotionEvent event) {
@@ -759,7 +746,6 @@ public class SwitchButton extends View {
 
     }
 
-
     @Override
 
     public void setOnClickListener(OnClickListener l) {
@@ -770,39 +756,6 @@ public class SwitchButton extends View {
 
     }
 
-
-    public interface OnStateChangedListener {
-
-        void toggleToOn(SwitchButton view);
-
-
-        void toggleToOff(SwitchButton view);
-
-    }
-
-
-    private OnStateChangedListener listener = new OnStateChangedListener() {
-
-        @Override
-
-        public void toggleToOn(SwitchButton view) {
-
-            toggleSwitch(true);
-
-        }
-
-
-        @Override
-
-        public void toggleToOff(SwitchButton view) {
-
-            toggleSwitch(false);
-
-        }
-
-    };
-
-
     public void setOnStateChangedListener(OnStateChangedListener listener) {
 
         if (listener == null) throw new IllegalArgumentException("empty listener");
@@ -810,7 +763,6 @@ public class SwitchButton extends View {
         this.listener = listener;
 
     }
-
 
     @Override
 
@@ -825,7 +777,6 @@ public class SwitchButton extends View {
         return ss;
 
     }
-
 
     @Override
 
@@ -844,48 +795,16 @@ public class SwitchButton extends View {
     }
 
 
+    public interface OnStateChangedListener {
+
+        void toggleToOn(SwitchButton view);
+
+
+        void toggleToOff(SwitchButton view);
+
+    }
+
     private static final class SavedState extends BaseSavedState {
-
-        private boolean isOpened;
-
-
-        SavedState(Parcelable superState) {
-
-            super(superState);
-
-        }
-
-
-        private SavedState(Parcel in) {
-
-            super(in);
-
-            isOpened = 1 == in.readInt();
-
-        }
-
-
-        @Override
-
-        public void writeToParcel(Parcel out, int flags) {
-
-            super.writeToParcel(out, flags);
-
-            out.writeInt(isOpened ? 1 : 0);
-
-        }
-
-
-        // fixed by Night99 https://github.com/g19980115
-
-        @Override
-
-        public int describeContents() {
-
-            return 0;
-
-        }
-
 
         public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
 
@@ -907,6 +826,44 @@ public class SwitchButton extends View {
             }
 
         };
+        private boolean isOpened;
+
+
+        SavedState(Parcelable superState) {
+
+            super(superState);
+
+        }
+
+
+        private SavedState(Parcel in) {
+
+            super(in);
+
+            isOpened = 1 == in.readInt();
+
+        }
+
+
+        // fixed by Night99 https://github.com/g19980115
+
+        @Override
+
+        public void writeToParcel(Parcel out, int flags) {
+
+            super.writeToParcel(out, flags);
+
+            out.writeInt(isOpened ? 1 : 0);
+
+        }
+
+        @Override
+
+        public int describeContents() {
+
+            return 0;
+
+        }
 
     }
 

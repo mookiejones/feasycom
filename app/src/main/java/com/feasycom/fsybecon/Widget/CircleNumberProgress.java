@@ -15,24 +15,16 @@ import android.view.View;
 
 public class CircleNumberProgress extends View {
     private static final String TAG = "CircleProgressBar";
-
-    private int mMaxProgress = 100;
-
-    private int mProgress = 30;
-
     private final int mCircleLineStrokeWidth = 18;
-
     private final int mTxtStrokeWidth = 2;
-
     /**
      * the circle where the circle is located
      */
     private final RectF mRectF;
-
     private final Paint mPaint;
-
     private final Context mContext;
-
+    private int mMaxProgress = 100;
+    private int mProgress = 30;
     private String mTxtHint1;
 
     private String mTxtHint2;
@@ -90,7 +82,7 @@ public class CircleNumberProgress extends View {
         mPaint.setStyle(Paint.Style.FILL);
         canvas.drawText(text, width / 2 - textWidth / 2, height / 2 + textHeight / 2, mPaint);
 
-        if (!"".equals(mTxtHint1) &&null !=mTxtHint1) {
+        if (!"".equals(mTxtHint1) && null != mTxtHint1) {
             mPaint.setStrokeWidth(mTxtStrokeWidth);
             text = mTxtHint1;
             textHeight = height / 8;
@@ -101,7 +93,7 @@ public class CircleNumberProgress extends View {
             canvas.drawText(text, width / 2 - textWidth / 2, height / 4 + textHeight / 2, mPaint);
         }
 
-        if (!"".equals(mTxtHint1) &&null !=mTxtHint2) {
+        if (!"".equals(mTxtHint1) && null != mTxtHint2) {
             mPaint.setStrokeWidth(mTxtStrokeWidth);
             text = mTxtHint2;
             textHeight = height / 8;

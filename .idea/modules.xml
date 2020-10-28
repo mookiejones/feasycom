@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/FeasyBeacon_Demo_Android.iml" filepath="$PROJECT_DIR$/FeasyBeacon_Demo_Android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Android_FeasyBeacon_317_lib_111.iml" filepath="$PROJECT_DIR$/Android_FeasyBeacon_317_lib_111.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Android_FeasyBeacon_317_lib_111.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Android_FeasyBeacon_317_lib_111.app.iml" />
     </modules>
   </component>
 </project>

@@ -1,7 +1,6 @@
 package com.feasycom.fsybecon.Adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import com.feasycom.bean.BluetoothDeviceWrapper;
 import com.feasycom.fsybecon.R;
-import com.feasycom.util.FeasycomUtil;
 
 import java.util.ArrayList;
 
@@ -49,15 +47,17 @@ public class SettingDeviceListAdapter extends BaseAdapter {
     }
 
     synchronized public void addDevice(BluetoothDeviceWrapper deviceDetail) {
-        if(deviceDetail == null){
+        if (deviceDetail == null) {
             return;
-        }
-        else {
-            if(null != deviceDetail.getFeasyBeacon()) {
-                Log.i("addDevice: ", deviceDetail.getFeasyBeacon().getmodule());
-                if(("25".equals(deviceDetail.getFeasyBeacon().getmodule()) || "26".equals(deviceDetail.getFeasyBeacon().getmodule())
-                        || "27".equals(deviceDetail.getFeasyBeacon().getmodule()) || "28".equals(deviceDetail.getFeasyBeacon().getmodule()))
-                        && (deviceDetail.getRssi() >= -70)){
+        } else {
+            if (null != deviceDetail.getFeasyBeacon()) {
+                if (("21".equals(deviceDetail.getFeasyBeacon().getmodule()) || "25".equals(deviceDetail.getFeasyBeacon().getmodule()) || "26".equals(deviceDetail.getFeasyBeacon().getmodule())
+                        || "27".equals(deviceDetail.getFeasyBeacon().getmodule()) || "28".equals(deviceDetail.getFeasyBeacon().getmodule())
+                        || "29".equals(deviceDetail.getFeasyBeacon().getmodule())
+                        || "30".equals(deviceDetail.getFeasyBeacon().getmodule())
+                        || "34".equals(deviceDetail.getFeasyBeacon().getmodule())
+                        || "35".equals(deviceDetail.getFeasyBeacon().getmodule())
+                        || "31".equals(deviceDetail.getFeasyBeacon().getmodule())) && (deviceDetail.getRssi() >= -80)) {
                     int i = 0;
                     for (; i < mDevices.size(); i++) {
                         if (deviceDetail.getAddress().equals(mDevices.get(i).getAddress())) {
@@ -124,9 +124,9 @@ public class SettingDeviceListAdapter extends BaseAdapter {
     }
 
     public void sort() {
-        for (int i=0; i < mDevices.size() - 1; i++) {
+        for (int i = 0; i < mDevices.size() - 1; i++) {
             for (int j = 0; j < mDevices.size() - 1 - i; j++) {
-                if(mDevices.get(j).getRssi() < mDevices.get(j + 1).getRssi()) {
+                if (mDevices.get(j).getRssi() < mDevices.get(j + 1).getRssi()) {
                     BluetoothDeviceWrapper bd = mDevices.get(j);
                     mDevices.set(j, mDevices.get(j + 1));
                     mDevices.set(j + 1, bd);
@@ -151,7 +151,7 @@ public class SettingDeviceListAdapter extends BaseAdapter {
         ViewHolder viewHolder;
         // General ListView optimization code.
         if (view == null) {
-            view = mInflator.inflate(R.layout.setting_device_info,null);
+            view = mInflator.inflate(R.layout.setting_device_info, null);
             viewHolder = new ViewHolder(view);
             view.setTag(viewHolder);
         } else {
@@ -163,9 +163,9 @@ public class SettingDeviceListAdapter extends BaseAdapter {
         String completeName = deviceDetail.getCompleteLocalName();
         String deviceAdd = deviceDetail.getAddress();
         int deviceRssi = deviceDetail.getRssi().intValue();
-        if((completeName != null) && completeName.length()>0){
-            viewHolder.tvName.setText(completeName);
-        }else if ((deviceName != null) && deviceName.length() > 0) {
+        if ((completeName != null) && completeName.length() > 0) {
+            viewHolder.tvName.setText(completeName + "-" + deviceAdd.substring(9, 11) + deviceAdd.substring(12, 14) + deviceAdd.substring(15, 17));
+        } else if ((deviceName != null) && deviceName.length() > 0) {
             viewHolder.tvName.setText(deviceName);
         } else {
             viewHolder.tvName.setText("unknow name");
@@ -188,6 +188,7 @@ public class SettingDeviceListAdapter extends BaseAdapter {
         }
         viewHolder.pbRssi.setProgress(100 + deviceRssi);
         viewHolder.tvRssi.setText("RSSI:" + deviceDetail.getRssi().toString());
+        /*
         if (null != deviceDetail.getFeasyBeacon()) {
             if (null == deviceDetail.getFeasyBeacon().getBattery()) {
                 viewHolder.chargePic.setImageResource(R.drawable.charging);
@@ -211,16 +212,67 @@ public class SettingDeviceListAdapter extends BaseAdapter {
         } else {
             viewHolder.chargePic.setImageResource(R.drawable.charging);
         }
+        */
+        if (null != deviceDetail.getFeasyBeacon()) {
+            if (null == deviceDetail.getFeasyBeacon().getBattery()) {
+                viewHolder.chargePic.setImageResource(R.drawable.electric_quantity_charging);
+                viewHolder.chargeValue.setText("100%");
+            } else {
+                int battry = Integer.valueOf(deviceDetail.getFeasyBeacon().getBattery()).intValue();
+                if (battry > 100) {
+                    viewHolder.chargePic.setImageResource(R.drawable.electric_quantity_charging);
+                    viewHolder.chargeValue.setText("100%");
+                } else if (battry == 0) {
+                    viewHolder.chargePic.setImageResource(R.drawable.electric_quantity0);
+                    viewHolder.chargeValue.setText("0%");
+                } else if (battry > 0 && battry < 10) {
+                    viewHolder.chargePic.setImageResource(R.drawable.electric_quantity10);
+                    viewHolder.chargeValue.setText(Integer.toString(battry) + "%");
+                } else if (battry >= 10 && battry < 20) {
+                    viewHolder.chargePic.setImageResource(R.drawable.electric_quantity20);
+                    viewHolder.chargeValue.setText(Integer.toString(battry) + "%");
+                } else if (battry >= 20 && battry < 30) {
+                    viewHolder.chargePic.setImageResource(R.drawable.electric_quantity30);
+                    viewHolder.chargeValue.setText(Integer.toString(battry) + "%");
+                } else if (battry >= 30 && battry < 40) {
+                    viewHolder.chargePic.setImageResource(R.drawable.electric_quantity40);
+                    viewHolder.chargeValue.setText(Integer.toString(battry) + "%");
+                } else if (battry >= 40 && battry < 50) {
+                    viewHolder.chargePic.setImageResource(R.drawable.electric_quantity50);
+                    viewHolder.chargeValue.setText(Integer.toString(battry) + "%");
+                } else if (battry >= 50 && battry < 60) {
+                    viewHolder.chargePic.setImageResource(R.drawable.electric_quantity60);
+                    viewHolder.chargeValue.setText(Integer.toString(battry) + "%");
+                } else if (battry >= 60 && battry < 70) {
+                    viewHolder.chargePic.setImageResource(R.drawable.electric_quantity70);
+                    viewHolder.chargeValue.setText(Integer.toString(battry) + "%");
+                } else if (battry >= 70 && battry < 80) {
+                    viewHolder.chargePic.setImageResource(R.drawable.electric_quantity80);
+                    viewHolder.chargeValue.setText(Integer.toString(battry) + "%");
+                } else if (battry >= 80 && battry < 90) {
+                    viewHolder.chargePic.setImageResource(R.drawable.electric_quantity90);
+                    viewHolder.chargeValue.setText(Integer.toString(battry) + "%");
+                } else if (battry >= 90 && battry <= 100) {
+                    viewHolder.chargePic.setImageResource(R.drawable.electric_quantity100);
+                    viewHolder.chargeValue.setText(Integer.toString(battry) + "%");
+                }
+            }
+
+        } else {
+            viewHolder.chargePic.setImageResource(R.drawable.electric_quantity_charging);
+            viewHolder.chargeValue.setText("100%");
+        }
         return view;
     }
 
 
-
-   static class ViewHolder {
+    static class ViewHolder {
         @BindView(R.id.tv_name)
         TextView tvName;
         @BindView(R.id.charge_pic)
         ImageView chargePic;
+        @BindView(R.id.charge_value)
+        TextView chargeValue;
         @BindView(R.id.tv_addr)
         TextView tvAddr;
         @BindView(R.id.tv_rssi)

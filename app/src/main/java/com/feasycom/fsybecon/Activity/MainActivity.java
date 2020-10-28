@@ -3,33 +3,30 @@ package com.feasycom.fsybecon.Activity;
 import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGatt;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.feasycom.bean.BluetoothDeviceWrapper;
-import com.feasycom.bean.EddystoneBeacon;
-import com.feasycom.bean.EncryptAlgorithm;
-import com.feasycom.controler.FscBeaconApi;
-import com.feasycom.controler.FscBeaconApiImp;
-import com.feasycom.controler.FscBeaconCallbacks;
-import com.feasycom.controler.FscBeaconCallbacksImp;
+import androidx.core.app.ActivityCompat;
+
 import com.feasycom.fsybecon.Adapter.SearchDeviceListAdapter;
 import com.feasycom.fsybecon.Controler.FscBeaconCallbacksImpMain;
 import com.feasycom.fsybecon.R;
 import com.feasycom.fsybecon.Widget.RefreshableView;
+import com.feasycom.bean.BluetoothDeviceWrapper;
+import com.feasycom.bean.EddystoneBeacon;
+import com.feasycom.controler.FscBeaconApi;
+import com.feasycom.controler.FscBeaconApiImp;
 import com.feasycom.util.LogUtil;
-import com.feasycom.util.TeaCode;
 
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
@@ -42,12 +39,26 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 
+import static com.feasycom.fsybecon.Activity.SetActivity.SCAN_FIXED_TIME;
+
 
 /**
  * Copyright 2017 Shenzhen Feasycom Technology co.,Ltd
  */
 
 public class MainActivity extends BaseActivity {
+    public static final String TAG = "MainActivity";
+    private static final int ENABLE_BT_REQUEST_ID = 1;
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    /**
+     * location permissions
+     */
+    private static String[] PERMISSIONS_LOCATION = {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS,
+            Manifest.permission.BLUETOOTH_PRIVILEGED
+    };
     @BindView(R.id.header_left)
     TextView headerLeft;
     @BindView(R.id.header_title)
@@ -64,39 +75,26 @@ public class MainActivity extends BaseActivity {
     ImageView SetButton;
     @BindView(R.id.About_Button)
     ImageView AboutButton;
+    @BindView(R.id.Sensor_Button)
+    ImageView SensorButton;
+    Queue<BluetoothDeviceWrapper> deviceQueue = new LinkedList<BluetoothDeviceWrapper>();
     private SearchDeviceListAdapter devicesAdapter;
     private FscBeaconApi fscBeaconApi;
     private Activity activity;
-    private static final int ENABLE_BT_REQUEST_ID = 1;
-    Queue<BluetoothDeviceWrapper> deviceQueue = new LinkedList<BluetoothDeviceWrapper>();
     private Timer timerUI;
     private TimerTask timerTask;
-    /**
-     * read and write permissions
-     */
-    private static String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS,
-            Manifest.permission.BLUETOOTH_PRIVILEGED
-    };
-    /**
-     * location permissions
-     */
-    private static String[] PERMISSIONS_LOCATION = {
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS,
-            Manifest.permission.BLUETOOTH_PRIVILEGED
-    };
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private Handler handler = new Handler();
 
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
 //        ((Activity) context).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);// 淡出淡入动画效果
+
+    }
+
+    @Override
+    protected String getTag() {
+        return TAG;
     }
 
     @Override
@@ -149,13 +147,17 @@ public class MainActivity extends BaseActivity {
             );
         } else {
             fscBeaconApi.setCallbacks(new FscBeaconCallbacksImpMain(new WeakReference<MainActivity>((MainActivity) activity)));
-            fscBeaconApi.startScan(60000);
-            //fscBeaconApi.startScan(0);
+            if (SCAN_FIXED_TIME) {
+                fscBeaconApi.startScan(60000);
+            } else {
+                fscBeaconApi.startScan(0);
+            }
         }
         timerUI = new Timer();
         timerTask = new UITimerTask(new WeakReference<MainActivity>((MainActivity) activity));
         timerUI.schedule(timerTask, 100, 100);
     }
+
 
     @Override
     protected void onPause() {
@@ -200,7 +202,9 @@ public class MainActivity extends BaseActivity {
                         deviceQueue.clear();
                         devicesAdapter.clearList();
                         devicesAdapter.notifyDataSetChanged();
-                        fscBeaconApi.startScan(60000);
+                        fscBeaconApi.stopScan();
+                        Log.e(TAG, "run: Refresh");
+                        fscBeaconApi.startScan(6000);
                         //fscBeaconApi.startScan(0);
                         refreshableView.finishRefreshing();
                     }
@@ -229,12 +233,14 @@ public class MainActivity extends BaseActivity {
     public void refreshHeader() {
         //headerTitle.setText(getResources().getString(R.string.app_name));
         headerTitle.setText("Beacon");
-        headerLeft.setText("Sort");
-        headerRight.setText("Filter");
+        //headerLeft.setText("Sort");
+        //headerRight.setText("Filter");
+        headerLeft.setVisibility(View.GONE);
+        headerRight.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.header_left)
-    public void deviceSort(){
+    public void deviceSort() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -258,6 +264,7 @@ public class MainActivity extends BaseActivity {
          */
         SetButton.setImageResource(R.drawable.setting_off);
         AboutButton.setImageResource(R.drawable.about_off);
+        SensorButton.setImageResource(R.drawable.sensor_off);
         SearchButton.setImageResource(R.drawable.search_on);
     }
 
@@ -270,20 +277,31 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    @OnClick(R.id.Sensor_Button)
+    public void sensorClick() {
+        fscBeaconApi.stopScan();
+        SensorActivity.actionStart(activity);
+        finishActivity();
+    }
+
     /**
      * about button binding events
      */
     @OnClick(R.id.About_Button)
     public void aboutClick() {
+        fscBeaconApi.stopScan();
         AboutActivity.actionStart(activity);
         finishActivity();
     }
+
 
     /**
      * set the button binding event
      */
     @OnClick(R.id.Set_Button)
     public void setClick() {
+        fscBeaconApi.stopScan();
+        Log.e(TAG, "setClick: ");
         SetActivity.actionStart(activity);
         finishActivity();
     }
@@ -304,6 +322,14 @@ public class MainActivity extends BaseActivity {
         finishActivity();
     }
 
+    public Queue<BluetoothDeviceWrapper> getDeviceQueue() {
+        return deviceQueue;
+    }
+
+    public SearchDeviceListAdapter getDevicesAdapter() {
+        return devicesAdapter;
+    }
+
     class UITimerTask extends TimerTask {
         private WeakReference<MainActivity> activityWeakReference;
 
@@ -321,13 +347,5 @@ public class MainActivity extends BaseActivity {
                 }
             });
         }
-    }
-
-    public Queue<BluetoothDeviceWrapper> getDeviceQueue() {
-        return deviceQueue;
-    }
-
-    public SearchDeviceListAdapter getDevicesAdapter() {
-        return devicesAdapter;
     }
 }

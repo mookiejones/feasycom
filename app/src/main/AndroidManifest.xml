@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-    <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
+    <!--    <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />-->
     <!-- 系统对话框权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <!-- 文件数据权限 -->
@@ -50,16 +50,21 @@
             android:windowSoftInputMode="adjustPan" />
 
         <service
-            android:name="com.feasycom.service.AtCommandService"
+            android:name="com.magna.beaconlibrary.service.AtCommandService"
             android:enabled="true"
             android:exported="true" />
         <service
-            android:name="com.feasycom.service.OTASPPService"
+            android:name="com.magna.beaconlibrary.service.OTASPPService"
             android:enabled="true"
             android:exported="true" />
 
         <activity
             android:name=".Activity.SetActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.notAnimation"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".Activity.SensorActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.notAnimation"
             android:windowSoftInputMode="adjustPan" />
@@ -84,7 +89,6 @@
             android:name=".Activity.FilterDeviceActivity"
             android:label="@string/title_activity_filter_device"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".Activity.FileterDeviceActivity" />
     </application>
 
 </manifest>

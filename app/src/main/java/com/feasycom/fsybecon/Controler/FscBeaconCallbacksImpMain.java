@@ -10,7 +10,8 @@ import java.lang.ref.WeakReference;
  * Copyright 2017 Shenzhen Feasycom Technology co.,Ltd
  */
 
-public class FscBeaconCallbacksImpMain extends FscBeaconCallbacksImp  {
+public class FscBeaconCallbacksImpMain extends FscBeaconCallbacksImp {
+    private static final String TAG = "FscBeaconCallbacksImpMa";
     private WeakReference<MainActivity> weakReference;
 
     public FscBeaconCallbacksImpMain(WeakReference<MainActivity> weakReference) {
@@ -23,7 +24,7 @@ public class FscBeaconCallbacksImpMain extends FscBeaconCallbacksImp  {
          * BLE search speed is fast,please pay attention to the life cycle of the device object ,directly use the final type here
          */
         if ((null != device.getgBeacon()) || (null != device.getiBeacon()) || (null != device.getAltBeacon())) {
-            if ((weakReference.get()!=null)&&(weakReference.get().getDeviceQueue().size() < 350)) {
+            if ((weakReference.get() != null) && (weakReference.get().getDeviceQueue().size() < 350)) {
                 weakReference.get().getDeviceQueue().offer(device);
             }
         }

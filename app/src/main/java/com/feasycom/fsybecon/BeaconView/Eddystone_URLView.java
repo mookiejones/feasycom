@@ -1,13 +1,11 @@
 package com.feasycom.fsybecon.BeaconView;
 
-import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,8 +16,6 @@ import com.feasycom.fsybecon.R;
 import com.feasycom.fsybecon.Utils.ViewUtil;
 import com.feasycom.fsybecon.Widget.DeleteDialog;
 import com.feasycom.fsybecon.Widget.SwitchButton;
-import com.feasycom.fsybecon.Widget.ToggleButton;
-import com.feasycom.util.LogUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,14 +23,13 @@ import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import butterknife.OnTouch;
 
-import static com.feasycom.fsybecon.Activity.ParameterSettingActivity.firstEnter;
-
 
 /**
  * Copyright 2017 Shenzhen Feasycom Technology co.,Ltd
  */
 
 public class Eddystone_URLView extends LinearLayout {
+
     public static final String URL_PROTOCOL_HTTP_WWW_DOT = "http://www.";
     public static final String URL_PROTOCOL_HTTPS_WWW_DOT = "https://www.";
     public static final String URL_PROTOCOL_HTTP = "http";
@@ -55,7 +50,7 @@ public class Eddystone_URLView extends LinearLayout {
     public static final String URL_TLD_DOT_INFO_SLASH = ".info/";
     public static final String URL_TLD_DOT_BIZ_SLASH = ".biz/";
     public static final String URL_TLD_DOT_GOV_SLASH = ".gov/";
-
+    private static final String TAG = "Eddystone_URLView";
     @BindView(R.id.beacon_index)
     TextView beaconIndex;
     @BindView(R.id.beacon_title)
@@ -84,6 +79,24 @@ public class Eddystone_URLView extends LinearLayout {
 
     }
 
+    /**
+     * URL header information conversion
+     *
+     * @return 1字节(String)
+     */
+    public static String getHeadByHex(String url) {
+        if (url.contains(URL_PROTOCOL_HTTPS_WWW_DOT)) {
+            return url.replace(URL_PROTOCOL_HTTPS_WWW_DOT, "01");        //EDDYSTONE_URL_PROTOCOL_HTTPS_WWW
+        } else if (url.contains(URL_PROTOCOL_HTTP_WWW_DOT)) {
+            return url.replace(URL_PROTOCOL_HTTP_WWW_DOT, "00");         //EDDYSTONE_URL_PROTOCOL_HTTP_WWW
+        } else if (url.contains(URL_PROTOCOL_HTTPS_COLON_SLASH_SLASH)) {
+            return url.replace(URL_PROTOCOL_HTTPS_COLON_SLASH_SLASH, "03");  // EDDYSTONE_URL_PROTOCOL_HTTP_WWW
+        } else if (url.contains(URL_PROTOCOL_HTTP_COLON_SLASH_SLASH)) {
+            return url.replace(URL_PROTOCOL_HTTP_COLON_SLASH_SLASH, "02");   //EDDYSTONE_URL_PROTOCOL_HTTP
+        }
+        return url;
+    }
+
     public void setDeleteDialog(DeleteDialog deleteDialog) {
         this.deleteDialog = deleteDialog;
     }
@@ -92,6 +105,9 @@ public class Eddystone_URLView extends LinearLayout {
         if (null == mBeacon) {
             this.mBeacon = beacon;
             eddystonePower.addTextChangedListener(new ViewUtil.PowerTextWatcher(eddystonePowerLable, eddystonePower, mBeacon));
+
+            beaconEnable.toggleSwitch(true);
+            mBeacon.setEnable(true);
 
             beaconEnable.setOnStateChangedListener(new SwitchButton.OnStateChangedListener() {
 
@@ -139,6 +155,7 @@ public class Eddystone_URLView extends LinearLayout {
     }
 
     public void setUrl(String temp) {
+        Log.e(TAG, "setUrl: " + temp);
         eddystoneUrl.setText(temp);
     }
 
@@ -157,7 +174,6 @@ public class Eddystone_URLView extends LinearLayout {
     public void setEnable(boolean flag) {
         beaconEnable.setOpened(flag);
     }
-
 
     @OnClick(R.id.image)
     public void deleteBeacon() {
@@ -225,46 +241,30 @@ public class Eddystone_URLView extends LinearLayout {
      */
     @OnTouch({R.id.eddystone_url, R.id.eddystone_power})
     public boolean touchListener(EditText v, MotionEvent event) {
-        EditText e = (EditText) v;
-        e.requestFocus();
-        e.setSelection(e.getText().length());
-//        LogUtil.i("action",event.getAction()+"");
-        if (event.getAction() == MotionEvent.ACTION_MOVE) {
-        } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-        } else if (event.getAction() == MotionEvent.ACTION_UP) {
-        }else if (event.getAction() == MotionEvent.ACTION_CANCEL){
-//            if (firstEnter) {
-//                firstEnter = false;
-//                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-//                imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
-//            }
-        }
+//        EditText e = (EditText) v;
+//        e.requestFocus();
+//        e.setSelection(e.getText().length());
+////        LogUtil.i("action",event.getAction()+"");
+//        if (event.getAction() == MotionEvent.ACTION_MOVE) {
+//        } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+//        } else if (event.getAction() == MotionEvent.ACTION_CANCEL) {
+////            if (firstEnter) {
+////                firstEnter = false;
+//            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+//            imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
+////            }
+//        }
         return false;
     }
 
     @OnClick({R.id.eddystone_url, R.id.eddystone_power})
     public void clickListener(EditText v) {
-        EditText e = (EditText) v;
-        e.requestFocus();
-        e.setSelection(e.getText().length());
-    }
-
-    /**
-     * URL header information conversion
-     *
-     * @return 1字节(String)
-     */
-    public static String getHeadByHex(String url) {
-        if (url.contains(URL_PROTOCOL_HTTPS_WWW_DOT)) {
-            return url.replace(URL_PROTOCOL_HTTPS_WWW_DOT, "01");        //EDDYSTONE_URL_PROTOCOL_HTTPS_WWW
-        } else if (url.contains(URL_PROTOCOL_HTTP_WWW_DOT)) {
-            return url.replace(URL_PROTOCOL_HTTP_WWW_DOT, "00");         //EDDYSTONE_URL_PROTOCOL_HTTP_WWW
-        } else if (url.contains(URL_PROTOCOL_HTTPS_COLON_SLASH_SLASH)) {
-            return url.replace(URL_PROTOCOL_HTTPS_COLON_SLASH_SLASH, "03");  // EDDYSTONE_URL_PROTOCOL_HTTP_WWW
-        } else if (url.contains(URL_PROTOCOL_HTTP_COLON_SLASH_SLASH)) {
-            return url.replace(URL_PROTOCOL_HTTP_COLON_SLASH_SLASH, "02");   //EDDYSTONE_URL_PROTOCOL_HTTP
-        }
-        return url;
+//        EditText e = (EditText) v;
+//        e.requestFocus();
+//        e.setSelection(e.getText().length());
+        v.setCursorVisible(false);
+        v.setCursorVisible(true);
     }
 
     /**
@@ -273,6 +273,7 @@ public class Eddystone_URLView extends LinearLayout {
      * @return 1字节(String)
      */
     public String getFootByHex(String url) {
+        Log.e(TAG, "getFootByHex: " + url);
         if (url.contains(URL_TLD_DOT_COM_SLASH)) {
             url = url.replace(URL_TLD_DOT_COM_SLASH, "00");           // EDDYSTONE_URL_COM_SLASH
         }

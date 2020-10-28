@@ -3,11 +3,9 @@ package com.feasycom.fsybecon.Widget;
 import android.app.Activity;
 import android.content.Context;
 import android.text.Html;
-import android.text.Spannable;
 import android.text.method.ScrollingMovementMethod;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,12 +22,11 @@ import butterknife.OnTouch;
  */
 public class AboutUsDialog extends BaseDialog {
     public boolean mScrolling = false;
+    public float touchDownYtemp = 0;
+    public float touchDownY = 0;
     @BindView(R.id.dialog_info)
     TextView dialogInfo;
     private Activity activity;
-
-    public float touchDownYtemp = 0;
-    public float touchDownY = 0;
 
 
     public AboutUsDialog(Context context) {

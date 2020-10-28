@@ -1,11 +1,11 @@
 package com.feasycom.fsybecon.Utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,123 +17,29 @@ import android.widget.TextView;
 
 import com.feasycom.bean.BeaconBean;
 import com.feasycom.controler.FscBeaconApi;
-import com.feasycom.controler.FscBeaconApiImp;
 import com.feasycom.fsybecon.BeaconView.LableEditView;
-import com.feasycom.util.FileUtil;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Utilities for generating view hierarchies without using resources.
  */
 public abstract class ViewUtil {
-    /**
-     *  
-     *  * the px value is converted to dip or dp value, to ensure that the size of the same
-     *  
-     */
-    public static int px2dip(Context context, float pxValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (pxValue / scale + 0.5f);
+
+
+    public static void setLabelEditRed(EditText editText, TextView textView) {
+        editText.setTextColor(Color.RED);
+        textView.setTextColor(Color.RED);
     }
 
-    /**
-     *  
-     *  * the dip or dp value is converted to px value, to ensure that the size of the same
-     *  
-     */
-    public static int dip2px(Context context, float dipValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dipValue * scale + 0.5f);
+    public static void setLabelEditBlock(EditText editText, TextView textView) {
+        editText.setTextColor(0xff7b7b7b);
+        textView.setTextColor(0xff1d1d1d);
     }
 
-    /**
-     *  
-     *  * the px value is converted to sp value, to ensure that the text size unchanged
-     *  
-     */
-    public static int px2sp(Context context, float pxValue) {
-        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
-        return (int) (pxValue / fontScale + 0.5f);
-    }
-
-    /**
-     *  
-     *    * the sp value is converted to px value, to ensure that the text size unchanged 
-     *  
-     */
-    public static int sp2px(Context context, float spValue) {
-        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
-        return (int) (spValue * fontScale + 0.5f);
-    }
-
-
-    public static final int dpToPx(float dp, Resources res) {
-        return (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dp,
-                res.getDisplayMetrics());
-    }
-
-    public static final FrameLayout.LayoutParams createLayoutParams(int width, int height) {
-        return new FrameLayout.LayoutParams(width, height);
-    }
-
-    public static final FrameLayout.LayoutParams createMatchParams() {
-        return createLayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT);
-    }
-
-    public static final FrameLayout.LayoutParams createWrapParams() {
-        return createLayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-    }
-
-    public static final FrameLayout.LayoutParams createWrapMatchParams() {
-        return createLayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.MATCH_PARENT);
-    }
-
-    public static final FrameLayout.LayoutParams createMatchWrapParams() {
-        return createLayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-    }
-
-
-    /**
-     * EditText the cursor is always in the end
-     */
-    public static class ClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            EditText e = (EditText) v;
-            e.requestFocus();
-            e.setSelection(e.getText().length());
-        }
-    }
-
-    public static class TouchListener implements View.OnTouchListener {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            EditText e = (EditText) v;
-            e.requestFocus();
-            e.setSelection(e.getText().length());
-            return false;
-        }
-    }
 
 
     /**
      * power limit [-128,127]
      * it means the RSSI signal strength at 1 meter or 0 meter
-     *
-     * @param
-     * @param
      */
     public static class PowerTextWatcher implements TextWatcher {
         TextView textView;
@@ -206,16 +112,6 @@ public abstract class ViewUtil {
         }
     }
 
-    public static void setLabelEditRed(EditText editText, TextView textView) {
-        editText.setTextColor(Color.RED);
-        textView.setTextColor(Color.RED);
-    }
-
-    public static void setLabelEditBlock(EditText editText, TextView textView) {
-        editText.setTextColor(0xff7b7b7b);
-        textView.setTextColor(0xff1d1d1d);
-    }
-
     /**
      * broadcast interval limit [100,700]
      */
@@ -240,6 +136,7 @@ public abstract class ViewUtil {
         @Override
         public void afterTextChanged(Editable s) {
             String value = s.toString();
+            Log.e("Interval", value);
             if (value.length() == 0) {
                 lableEditView.setRed();
                 return;
@@ -249,6 +146,7 @@ public abstract class ViewUtil {
                 //   int temp= Integer.parseInt(value);
                 if (temp >= 100 && temp <= 700) {
                     lableEditView.setBlock();
+                    // beaconWrapper.setBroadcastInterval(value);
                     beaconWrapper.setBroadcastInterval(value);
                 } else {
                     lableEditView.setRed();
@@ -256,6 +154,96 @@ public abstract class ViewUtil {
             } catch (Exception e) {
                 lableEditView.setRed();
             }
+
+        }
+    }
+
+    /**
+     * broadcast interval limit [100,700]
+     */
+    public static class GsensorTextWatcher implements TextWatcher {
+        private LableEditView lableEditView;
+        private FscBeaconApi beaconWrapper;
+
+        public GsensorTextWatcher(LableEditView lableEditView, FscBeaconApi beaconWrapper) {
+            this.lableEditView = lableEditView;
+            this.beaconWrapper = beaconWrapper;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            lableEditView.setInputType(EditorInfo.TYPE_CLASS_NUMBER);
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+           /* String value = s.toString();
+            if (value.length() == 0) {
+                lableEditView.setRed();
+                return;
+            }
+            try {
+                double temp = Double.parseDouble(value);
+                //   int temp= Integer.parseInt(value);
+                if (temp >= 100 && temp <= 700) {
+                    lableEditView.setBlock();
+                    beaconWrapper.setGscfg(value,"500");
+                } else {
+                    lableEditView.setRed();
+                }
+            } catch (Exception e) {
+                lableEditView.setRed();
+            }*/
+            lableEditView.setBlock();
+            // beaconWrapper.setGscfg("200", "500");
+        }
+
+    }
+
+
+    public static class KeyTextWatcher implements TextWatcher {
+        private LableEditView lableEditView;
+        private FscBeaconApi beaconWrapper;
+
+        public KeyTextWatcher(LableEditView lableEditView, FscBeaconApi beaconWrapper) {
+            this.lableEditView = lableEditView;
+            this.beaconWrapper = beaconWrapper;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            lableEditView.setInputType(EditorInfo.TYPE_CLASS_NUMBER);
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+          /*  String value = s.toString();
+            if (value.length() == 0) {
+                lableEditView.setRed();
+                return;
+            }
+            try {
+                double temp = Double.parseDouble(value);
+                //   int temp= Integer.parseInt(value);
+                if (temp >= 100 && temp <= 700) {
+                    lableEditView.setBlock();
+                    beaconWrapper.setKeycfg(value,"500");
+                } else {
+                    lableEditView.setRed();
+                }
+            } catch (Exception e) {
+                lableEditView.setRed();
+            }*/
+            lableEditView.setBlock();
+            beaconWrapper.setGscfg("200", "500");
 
         }
     }
@@ -285,7 +273,7 @@ public abstract class ViewUtil {
         @Override
         public void afterTextChanged(Editable s) {
             String value = s.toString();
-            if ( value.length() == 6) {
+            if (value.length() == 6) {
                 lableEditView.setBlock();
                 beaconWrapper.setFscPin(value);
             } else {

@@ -45,6 +45,7 @@ public class EddystoneBeaconItem extends RelativeLayout {
 
     /**
      * display googleBeacon data
+     *
      * @param gBeacon
      */
     public void setGBeaconValue(EddystoneBeacon gBeacon) {

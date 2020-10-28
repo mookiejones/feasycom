@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,15 +15,16 @@ import com.feasycom.fsybecon.R;
 import com.feasycom.fsybecon.Widget.AboutUsDialog;
 import com.feasycom.fsybecon.Widget.QRDialog;
 
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 /**
  * Copyright 2017 Shenzhen Feasycom Technology co.,Ltd
  */
 
 public class AboutActivity extends BaseActivity {
+    private static final String TAG = "AboutActivity";
     @BindView(R.id.more)
     TextView more;
     @BindView(R.id.qr)
@@ -36,12 +37,18 @@ public class AboutActivity extends BaseActivity {
     ImageView AboutButton;
     @BindView(R.id.aboutUsTV)
     TextView aboutUsTV;
-
+    @BindView(R.id.Sensor_Button)
+    ImageView SensorButton;
     private Activity activity;
 
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, AboutActivity.class);
         context.startActivity(intent);
+    }
+
+    @Override
+    protected String getTag() {
+        return TAG;
     }
 
     @Override
@@ -88,12 +95,14 @@ public class AboutActivity extends BaseActivity {
         SetButton.setImageResource(R.drawable.setting_off);
         AboutButton.setImageResource(R.drawable.about_on);
         SearchButton.setImageResource(R.drawable.search_off);
+        SensorButton.setImageResource(R.drawable.sensor_off);
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK
                 && event.getRepeatCount() == 0) {
+            Log.e(TAG, "onKeyDown: ");
             SetActivity.actionStart(activity);
             finishActivity();
         }
@@ -121,6 +130,14 @@ public class AboutActivity extends BaseActivity {
     @Override
     public void searchClick() {
         MainActivity.actionStart(activity);
+        activity.finish();
+    }
+
+
+    @OnClick(R.id.Sensor_Button)
+    @Override
+    public void sensorClick() {
+        SensorActivity.actionStart(activity);
         activity.finish();
     }
 

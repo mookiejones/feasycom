@@ -17,11 +17,12 @@ import butterknife.ButterKnife;
  */
 
 public class InfoDialog extends BaseDialog {
-    public static int INFO_DIAOLOG_SHOW_TIME=2000;
+    public static int INFO_DIAOLOG_SHOW_TIME = 2000;
     @BindView(R.id.dialog_info)
     TextView dialogInfo;
-    private Activity activity;
     String info;
+    private Activity activity;
+
     public InfoDialog(Context context, String info) {
         super((Activity) context);
         this.activity = (Activity) context;
@@ -42,6 +43,10 @@ public class InfoDialog extends BaseDialog {
         dialogInfo.setText(info);
     }
 
+    public String getInfo() {
+        return this.info;
+    }
+
     public void setInfo(final String info) {
         this.info = info;
         activity.runOnUiThread(new Runnable() {
@@ -50,9 +55,5 @@ public class InfoDialog extends BaseDialog {
                 dialogInfo.setText(info);
             }
         });
-    }
-
-    public String getInfo() {
-        return this.info;
     }
 }

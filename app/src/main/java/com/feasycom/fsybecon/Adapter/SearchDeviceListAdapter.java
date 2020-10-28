@@ -1,8 +1,6 @@
 package com.feasycom.fsybecon.Adapter;
 
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,19 +15,20 @@ import com.feasycom.fsybecon.BeaconView.AltBeaconItem;
 import com.feasycom.fsybecon.BeaconView.EddystoneBeaconItem;
 import com.feasycom.fsybecon.BeaconView.IBeaconItem;
 import com.feasycom.fsybecon.R;
+import com.feasycom.fsybecon.Utils.SettingConfigUtil;
+import com.feasycom.fsybecon.Widget.TipsDialog;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.feasycom.fsybecon.Activity.FilterDeviceActivity.filterValue;
-import static com.feasycom.fsybecon.Activity.FilterDeviceActivity.isFilterEnable;
 /**
  * Copyright 2017 Shenzhen Feasycom Technology co.,Ltd
  */
 
 public class SearchDeviceListAdapter extends BaseAdapter {
+    TipsDialog tipsDialog;
     private LayoutInflater mInflator;
     private Context mContext;
     private ArrayList<BluetoothDeviceWrapper> mDevices = new ArrayList<BluetoothDeviceWrapper>();
@@ -59,42 +58,51 @@ public class SearchDeviceListAdapter extends BaseAdapter {
         int i = 0;
         for (; i < mDevices.size(); i++) {
             if (deviceDetail.getAddress().equals(mDevices.get(i).getAddress())) {
+                mDevices.get(i).setCompleteLocalName(deviceDetail.getCompleteLocalName());
+                mDevices.get(i).setName(deviceDetail.getName());
+                mDevices.get(i).setRssi(deviceDetail.getRssi());
                 if (null != deviceDetail.getiBeacon()) {
-                    if (deviceDetail.getiBeacon().equals(mDevices.get(i).getiBeacon())) {
+                    if (deviceDetail.getAdvData().equals(mDevices.get(i).getAdvData())) {
+                        Log.i("iBeacon", Integer.toString(i));
                         return false;
                     }
                 }
                 if (null != deviceDetail.getgBeacon()) {
-                    if (deviceDetail.getgBeacon().equals(mDevices.get(i).getgBeacon())) {
+                    if (deviceDetail.getAdvData().equals(mDevices.get(i).getAdvData())) {
                         return false;
                     }
                 }
                 if (null != deviceDetail.getAltBeacon()) {
-                    if (deviceDetail.getAltBeacon().equals(mDevices.get(i).getAltBeacon())) {
+                    if (deviceDetail.getAdvData().equals(mDevices.get(i).getAdvData())) {
                         return false;
                     }
                 }
             }
         }
+        Log.i("count", Integer.toString(i));
         if (i >= mDevices.size()) {
             mDevices.add(deviceDetail);
         }
 
         //process the filter event.
-        if(isFilterEnable == true)
-        {
-            Log.i("filterValue", ": "+String.valueOf(filterValue+100));
-            if (mDevices.get(i).getRssi() < filterValue) {
+        if ((boolean) SettingConfigUtil.getData(mContext, "filter_switch", false)) {
+            if (mDevices.get(i).getRssi() < ((int) SettingConfigUtil.getData(mContext, "filter_value", -100) - 100)) {
                 mDevices.remove(i);
             }
+        }
+
+        if (mDevices.size() == 300) {
+            tipsDialog = new TipsDialog(mContext);
+            tipsDialog.setInfo("many device were found,please pull down!");
+            tipsDialog.show();
         }
         return false;
     }
 
     public void sort() {
-        for (int i=0; i < mDevices.size() - 1; i++) {
+        for (int i = 0; i < mDevices.size() - 1; i++) {
             for (int j = 0; j < mDevices.size() - 1 - i; j++) {
-                if(mDevices.get(j).getRssi() < mDevices.get(j + 1).getRssi()) {
+                if (mDevices.get(j).getRssi() < mDevices.get(j + 1).getRssi()) {
                     BluetoothDeviceWrapper bd = mDevices.get(j);
                     mDevices.set(j, mDevices.get(j + 1));
                     mDevices.set(j + 1, bd);
@@ -133,13 +141,13 @@ public class SearchDeviceListAdapter extends BaseAdapter {
         String deviceAdd = deviceDetail.getAddress();
         String deviceModel = deviceDetail.getModel();
         int deviceRssi = deviceDetail.getRssi().intValue();
-        if((completeName != null) && completeName.length()>0){
+        if ((completeName != null) && completeName.length() > 0) {
             //设备名长度限制，最大10
             if (completeName.length() > 10) {
                 completeName = completeName.substring(0, 10);
             }
             viewHolder.tvName.setText(completeName);
-        }else if (deviceName != null && deviceName.length() > 0) {
+        } else if (deviceName != null && deviceName.length() > 0) {
             //设备名长度限制，最大10
             if (deviceName.length() > 10) {
                 deviceName = deviceName.substring(0, 10);

@@ -5,7 +5,6 @@ import android.text.Editable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,16 +15,12 @@ import com.feasycom.fsybecon.R;
 import com.feasycom.fsybecon.Utils.ViewUtil;
 import com.feasycom.fsybecon.Widget.DeleteDialog;
 import com.feasycom.fsybecon.Widget.SwitchButton;
-import com.feasycom.fsybecon.Widget.ToggleButton;
-import com.feasycom.util.LogUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import butterknife.OnTouch;
-
-import static com.feasycom.fsybecon.Activity.ParameterSettingActivity.firstEnter;
 
 
 /**
@@ -61,9 +56,10 @@ public class iBeaconView extends LinearLayout {
     private BeaconBean mBeacon;
     private DeleteDialog deleteDialog;
     private Context context;
+
     public iBeaconView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.context=context;
+        this.context = context;
         View view = View.inflate(context, R.layout.ibeacon_parameter_setting, this);
         ButterKnife.bind(view);
     }
@@ -77,18 +73,19 @@ public class iBeaconView extends LinearLayout {
             this.mBeacon = beacon;
             ibeaconPower.addTextChangedListener(new ViewUtil.PowerTextWatcher(ibeaconPowerLabel, ibeaconPower, mBeacon));
 
+            beaconEnable.toggleSwitch(true);
+            mBeacon.setEnable(true);
+
             beaconEnable.setOnStateChangedListener(new SwitchButton.OnStateChangedListener() {
 
                 @Override
                 public void toggleToOn(SwitchButton view) {
-//                    LogUtil.i("toggle","on");
                     view.toggleSwitch(true);
                     mBeacon.setEnable(true);
                 }
 
                 @Override
                 public void toggleToOff(SwitchButton view) {
-//                    LogUtil.i("toggle","off");
                     view.toggleSwitch(false);
                     mBeacon.setEnable(false);
                 }
@@ -127,27 +124,33 @@ public class iBeaconView extends LinearLayout {
     }
 
     public void setIndex(String temp) {
-        beaconIndex.setText(temp);
+        beaconIndex.setText("2222");
+        // beaconIndex.setText(temp);
     }
 
     public void setTitle() {
-        beaconTitle.setText("iBeacon");
+        beaconTitle.setText("2222");
+        // beaconTitle.setText("iBeacon");
     }
 
     public void setUuid(String temp) {
-        ibeaconUuid.setText(temp);
+        ibeaconUuid.setText("2222");
+        // ibeaconUuid.setText(temp);
     }
 
     public void setMajor(String temp) {
-        ibeaconMajor.setText(temp);
+        ibeaconMajor.setText("2222");
+        // ibeaconMajor.setText(temp);
     }
 
     public void setMinor(String temp) {
-        ibeaconMinor.setText(temp);
+        ibeaconMinor.setText("2222");
+        // ibeaconMinor.setText(temp);
     }
 
     public void setTxpower(String temp) {
-        ibeaconPower.setText(temp);
+        ibeaconPower.setText("2222");
+        // ibeaconPower.setText(temp);
     }
 
 
@@ -163,7 +166,7 @@ public class iBeaconView extends LinearLayout {
     @OnTextChanged(R.id.ibeacon_major)
     public void afterTextChangedMajor(Editable s) {
         String value = s.toString();
-        if (value.length() > 0 && value.length()<=5 && Integer.valueOf(value).intValue() <= 65535) {
+        if (value.length() > 0 && value.length() <= 5 && Integer.valueOf(value).intValue() <= 65535) {
             ViewUtil.setLabelEditBlock(ibeaconMajor, ibeaconMajorLabel);
             mBeacon.setMajor(value);
         } else {
@@ -177,7 +180,7 @@ public class iBeaconView extends LinearLayout {
     @OnTextChanged(R.id.ibeacon_minor)
     public void afterTextChangedMinor(Editable s) {
         String value = s.toString();
-        if (value.length() > 0 && value.length() <=5 && Integer.valueOf(value).intValue() <= 65535) {
+        if (value.length() > 0 && value.length() <= 5 && Integer.valueOf(value).intValue() <= 65535) {
             ViewUtil.setLabelEditBlock(ibeaconMinor, ibeaconMinorLabel);
             mBeacon.setMinor(value);
         } else {
@@ -206,28 +209,32 @@ public class iBeaconView extends LinearLayout {
      * make sure the cursor is always on the right
      */
     @OnTouch({R.id.ibeacon_major, R.id.ibeacon_minor, R.id.ibeacon_uuid, R.id.ibeacon_power})
-    public boolean touchListener(EditText v,MotionEvent event) {
-        EditText e = (EditText) v;
-        e.requestFocus();
-        e.setSelection(e.getText().length());
+    public boolean touchListener(EditText v, MotionEvent event) {
+//        EditText e = (EditText) v;
+//        e.requestFocus();
+//        e.setSelection(e.getText().length());
 //        LogUtil.i("action",event.getAction()+"");
-        if (event.getAction() == MotionEvent.ACTION_MOVE) {
-        } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-        } else if (event.getAction() == MotionEvent.ACTION_UP) {
-        }else if (event.getAction() == MotionEvent.ACTION_CANCEL){
+//        if (event.getAction() == MotionEvent.ACTION_MOVE) {
+//        } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+//        } else if (event.getAction() == MotionEvent.ACTION_CANCEL) {
 //            if (firstEnter) {
 //                firstEnter = false;
 //                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 //                imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
 //            }
-        }
+//            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+//            imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
+//        }
         return false;
     }
 
     @OnClick({R.id.ibeacon_major, R.id.ibeacon_minor, R.id.ibeacon_uuid, R.id.ibeacon_power})
     public void clickListener(EditText v) {
-        EditText e = (EditText) v;
-        e.requestFocus();
-        e.setSelection(e.getText().length());
+//        EditText e = (EditText) v;
+//        e.requestFocus();
+//        e.setSelection(e.getText().length());
+        v.setCursorVisible(false);
+        v.setCursorVisible(true);
     }
 }

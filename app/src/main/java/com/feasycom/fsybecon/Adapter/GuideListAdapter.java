@@ -1,8 +1,9 @@
 package com.feasycom.fsybecon.Adapter;
 
-import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.viewpager.widget.PagerAdapter;
 
 import java.util.List;
 
@@ -10,16 +11,16 @@ import java.util.List;
  * Created by younger on 2018/7/2.
  */
 
-public class GuideListAdapter extends PagerAdapter{
+public class GuideListAdapter extends PagerAdapter {
     private List<View> viewList;
 
-    public GuideListAdapter(List<View> viewList){
+    public GuideListAdapter(List<View> viewList) {
         this.viewList = viewList;
     }
 
     @Override
     public int getCount() {
-        if(viewList != null){
+        if (viewList != null) {
             return viewList.size();
         }
         return 0;

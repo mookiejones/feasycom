@@ -6,11 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-import com.feasycom.fsybecon.Bean.BaseEvent;
 import com.feasycom.fsybecon.R;
-
-import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,7 +22,8 @@ public class TipsDialog extends BaseDialog {
 
     @BindView(R.id.tips_got)
     Button tips_got;
-
+    @BindView(R.id.dialog_tips)
+    TextView dialogTips;
     private Context context;
     private String index;
 
@@ -44,6 +43,10 @@ public class TipsDialog extends BaseDialog {
         this.addContentView(v, lp);
         ButterKnife.bind(this);
         setCanceledOnTouchOutside(false);
+    }
+
+    public void setInfo(final String info) {
+        dialogTips.setText(info);
     }
 
     public String getIndex() {

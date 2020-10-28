@@ -48,44 +48,26 @@ public class RefreshableView extends LinearLayout implements View.OnTouchListene
     public static final long ONE_YEAR = 12 * ONE_MONTH;
 
     private static final String UPDATED_AT = "updated_at";
-
-    private PullToRefreshListener mListener;
-
-    private SharedPreferences preferences;
-
-    private View header;
-
-    private ListView listView;
-
-    private ProgressBar progressBar;
-
-    private ImageView arrow;
-
-    private TextView description;
-
-    private TextView updateAt;
-
-    private MarginLayoutParams headerLayoutParams;
-
-    private long lastUpdateTime;
-
-    private int mId = -1;
-
-    private int hideHeaderHeight;
-
-    private int currentStatus = STATUS_REFRESH_FINISHED;;
-
-    private int lastStatus = currentStatus;
-
-    private float yDown;
-
-    private int touchSlop;
-
-    private boolean loadOnce;
-
     public boolean ableToPull;
-
-    private FscBleCentralApi fscBleCentralApi= FscBleCentralApiImp.getInstance();
+    private PullToRefreshListener mListener;
+    private SharedPreferences preferences;
+    private View header;
+    private ListView listView;
+    private ProgressBar progressBar;
+    private ImageView arrow;
+    private TextView description;
+    private TextView updateAt;
+    private MarginLayoutParams headerLayoutParams;
+    private long lastUpdateTime;
+    private int mId = -1;
+    private int hideHeaderHeight;
+    ;
+    private int currentStatus = STATUS_REFRESH_FINISHED;
+    private int lastStatus = currentStatus;
+    private float yDown;
+    private int touchSlop;
+    private boolean loadOnce;
+    private FscBleCentralApi fscBleCentralApi = FscBleCentralApiImp.getInstance();
 
     public RefreshableView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -113,6 +95,7 @@ public class RefreshableView extends LinearLayout implements View.OnTouchListene
             loadOnce = true;
         }
     }
+
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         setIsAbleToPull(event);
@@ -270,6 +253,23 @@ public class RefreshableView extends LinearLayout implements View.OnTouchListene
         updateAt.setText(updateAtValue);
     }
 
+    private void sleep(int time) {
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setLayoutParams(MarginLayoutParams layoutParams) {
+        // bleWrapper.getmUiCallback().uiAdapterSetChange();
+        header.setLayoutParams(layoutParams);
+    }
+
+    public interface PullToRefreshListener {
+        void onRefresh();
+    }
+
     class RefreshingTask extends AsyncTask<Void, Integer, Void> {
         @Override
         protected Void doInBackground(Void... params) {
@@ -280,6 +280,7 @@ public class RefreshableView extends LinearLayout implements View.OnTouchListene
             }
             return null;
         }
+
         @Override
         protected void onProgressUpdate(Integer... topMargin) {
             updateHeaderView();
@@ -293,11 +294,13 @@ public class RefreshableView extends LinearLayout implements View.OnTouchListene
         protected Integer doInBackground(Void... params) {
             return hideHeaderHeight;
         }
+
         @Override
         protected void onProgressUpdate(Integer... topMargin) {
             headerLayoutParams.topMargin = topMargin[0];
             setLayoutParams(headerLayoutParams);
         }
+
         @Override
         protected void onPostExecute(Integer topMargin) {
             headerLayoutParams.topMargin = topMargin;
@@ -305,21 +308,5 @@ public class RefreshableView extends LinearLayout implements View.OnTouchListene
             setLayoutParams(headerLayoutParams);
             currentStatus = STATUS_REFRESH_FINISHED;
         }
-    }
-
-    private void sleep(int time) {
-        try {
-            Thread.sleep(time);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-    public interface PullToRefreshListener {
-        void onRefresh();
-    }
-
-    private void setLayoutParams(MarginLayoutParams layoutParams){
-       // bleWrapper.getmUiCallback().uiAdapterSetChange();
-        header.setLayoutParams(layoutParams);
     }
 }

@@ -12,14 +12,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.feasycom.fsybecon.R;
-import com.feasycom.util.LogUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
-
-import static com.feasycom.fsybecon.Activity.ParameterSettingActivity.firstEnter;
 
 
 /**
@@ -40,13 +37,8 @@ public class LableEditView extends LinearLayout {
         ButterKnife.bind(view);
         TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.LableEditView);
         String label = typedArray.getString(R.styleable.LableEditView_labelText);
-
         parameterLabel.setText(label);
         typedArray.recycle();
-    }
-
-    public void setText(String temp) {
-        parameter.setText(temp);
     }
 
     /**
@@ -68,8 +60,8 @@ public class LableEditView extends LinearLayout {
         return parameter.getText().toString();
     }
 
-    public void setSelection(int length) {
-        parameter.setSelection(length);
+    public void setText(String temp) {
+        parameter.setText(temp);
     }
 
     public void setRed() {
@@ -102,14 +94,15 @@ public class LableEditView extends LinearLayout {
         if (event.getAction() == MotionEvent.ACTION_MOVE) {
         } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
-        }else if (event.getAction() == MotionEvent.ACTION_CANCEL){
+        } else if (event.getAction() == MotionEvent.ACTION_CANCEL) {
 //            if (firstEnter) {
 //                firstEnter = false;
-//                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-//                imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
-//            }
-        }
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
 
+//            }
+
+        }
         return false;
     }
 

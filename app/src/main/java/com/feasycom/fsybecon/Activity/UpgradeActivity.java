@@ -1,13 +1,11 @@
 package com.feasycom.fsybecon.Activity;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,10 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.feasycom.bean.BluetoothDeviceWrapper;
-import com.feasycom.bean.CommandBean;
 import com.feasycom.controler.FscSppApi;
 import com.feasycom.controler.FscSppApiImp;
-import com.feasycom.controler.FscSppCallbacksImp;
 import com.feasycom.fsybecon.Controler.FscBeaconCallbacksImpOta;
 import com.feasycom.fsybecon.R;
 import com.feasycom.fsybecon.Widget.CircleNumberProgress;
@@ -40,6 +36,7 @@ import butterknife.OnClick;
  */
 
 public class UpgradeActivity extends BaseActivity {
+    public static final String TAG = "UpgradeActivity";
     @BindView(R.id.header_left)
     TextView headerLeft;
     @BindView(R.id.header_title)
@@ -78,7 +75,17 @@ public class UpgradeActivity extends BaseActivity {
     LinearLayout resetLL;
     @BindView(R.id.otaProgressLL)
     LinearLayout otaProgressLL;
+    //BLE 密码
+    String pin;
     private Activity activity;
+    Runnable goBackRunnable = new Runnable() {
+        @Override
+        public void run() {
+            Log.e(TAG, "run: ");
+            SetActivity.actionStart(activity);
+            finishActivity();
+        }
+    };
     private BluetoothDeviceWrapper bluetoothDeviceWrapper;
     private String currentVersionString;
     private String currentModuleNumberString;
@@ -86,17 +93,29 @@ public class UpgradeActivity extends BaseActivity {
     private String encryptWay;
     private byte[] fileByte = null;
     private FscSppApi fscSppApi;
+    Runnable reConnect = new Runnable() {
+        @Override
+        public void run() {
+            if (!fscSppApi.isConnected()) {
+                fscSppApi.connect(addr, pin);
+            }
+        }
+    };
     private Handler handler;
-    //BLE 密码
-    String pin;
 
     public static void actionStart(Context context, BluetoothDeviceWrapper bluetoothDeviceWrapper, String pin) {
+        Log.e(TAG, "actionStart");
         Intent intent = new Intent(context, UpgradeActivity.class);
         Bundle mBundle = new Bundle();
         mBundle.putSerializable("device", (Serializable) bluetoothDeviceWrapper);
         mBundle.putSerializable("pin", pin);
         intent.putExtras(mBundle);
         context.startActivity(intent);
+    }
+
+    @Override
+    protected String getTag() {
+        return TAG;
     }
 
     @Override
@@ -138,14 +157,6 @@ public class UpgradeActivity extends BaseActivity {
         fscSppApi.setCallbacks(new FscBeaconCallbacksImpOta(new WeakReference<UpgradeActivity>((UpgradeActivity) activity)));
         fscSppApi.connect(addr, pin);
     }
-    Runnable reConnect=new Runnable() {
-        @Override
-        public void run() {
-            if(!fscSppApi.isConnected()){
-                fscSppApi.connect(addr, pin);
-            }
-        }
-    };
 
     @Override
     protected void onResume() {
@@ -207,12 +218,9 @@ public class UpgradeActivity extends BaseActivity {
         }
     }
 
-
     @OnCheckedChanged(R.id.reset)
     public void restCheck(boolean check) {
     }
-
-    
 
     @OnClick(R.id.startOTA)
     public void startOTA() {
@@ -222,7 +230,7 @@ public class UpgradeActivity extends BaseActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ToastUtil.show(activity,"failed device is not connected");
+                    ToastUtil.show(activity, "failed device is not connected");
                     startOTA.setEnabled(false);
                 }
             });
@@ -276,13 +284,12 @@ public class UpgradeActivity extends BaseActivity {
         finishActivity();
     }
 
-    Runnable goBackRunnable = new Runnable() {
-        @Override
-        public void run() {
-            SetActivity.actionStart(activity);
-            finishActivity();
-        }
-    };
+    @OnClick(R.id.Sensor_Button)
+    @Override
+    public void sensorClick() {
+        SensorActivity.actionStart(activity);
+        finishActivity();
+    }
 
     public Handler getHandler() {
         return handler;

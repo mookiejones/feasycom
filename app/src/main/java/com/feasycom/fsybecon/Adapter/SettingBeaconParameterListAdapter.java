@@ -14,7 +14,6 @@ import com.feasycom.fsybecon.BeaconView.Eddystone_URLView;
 import com.feasycom.fsybecon.BeaconView.iBeaconView;
 import com.feasycom.fsybecon.R;
 import com.feasycom.fsybecon.Widget.DeleteDialog;
-import com.feasycom.util.LogUtil;
 
 import java.util.ArrayList;
 
@@ -31,11 +30,13 @@ public class SettingBeaconParameterListAdapter extends BaseAdapter {
     private LayoutInflater mInflator;
     private Context mContext1;
     private ArrayList<BeaconBean> beacons = new ArrayList<BeaconBean>();
+    private FeasyBeacon fb;
 
-    public SettingBeaconParameterListAdapter(Context context, LayoutInflater Inflator) {
+    public SettingBeaconParameterListAdapter(Context context, LayoutInflater Inflator, FeasyBeacon fb) {
         super();
         mContext1 = context;
         mInflator = Inflator;
+        this.fb = fb;
     }
 
     @Override
@@ -77,7 +78,7 @@ public class SettingBeaconParameterListAdapter extends BaseAdapter {
     }
 
     @Override
-   synchronized  public View getView(final int position, View view, ViewGroup parent) {
+    synchronized public View getView(final int position, View view, ViewGroup parent) {
         // TODO Auto-generated method stub
         ViewHolder viewHolder;
         // General ListView optimization code.
