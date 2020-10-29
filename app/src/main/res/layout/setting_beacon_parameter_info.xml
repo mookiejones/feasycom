@@ -1,0 +1,11 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
+
+    <com.magna.moldingtools.BeaconView.iBeaconView android:id="@+id/setting_parameter_ibeacon" android:layout_width="match_parent" android:layout_height="match_parent" android:visibility="gone"></com.magna.moldingtools.BeaconView.iBeaconView>
+
+
+    <com.magna.moldingtools.BeaconView.Eddystone_UIDView android:id="@+id/setting_parameter_eddystone_uid" android:layout_width="match_parent" android:layout_height="match_parent" android:visibility="gone"></com.magna.moldingtools.BeaconView.Eddystone_UIDView>
+
+    <com.magna.moldingtools.BeaconView.Eddystone_URLView android:id="@+id/setting_parameter_eddystone_url" android:layout_width="match_parent" android:layout_height="match_parent" android:visibility="gone"></com.magna.moldingtools.BeaconView.Eddystone_URLView>
+
+    <com.magna.moldingtools.BeaconView.AltBeaconView android:id="@+id/setting_parameter_altbeacon" android:layout_width="match_parent" android:layout_height="match_parent" android:visibility="gone"></com.magna.moldingtools.BeaconView.AltBeaconView>
+</LinearLayout>

@@ -1,1 +1,2 @@
+include ':feasycom'
 include ':app'

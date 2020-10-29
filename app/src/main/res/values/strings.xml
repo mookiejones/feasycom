@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="filter_by_rssi">Filter Enable</string>
+    <string name="app_name">Molding Tools</string>
+
+    //默认值
+    <!-- 默认 0db-->
+
+    //关于
+    <string name="more">more ></string>
+    <string name="about_title">About Feasycom</string>
+    <string name="company">Company</string>
+    <string name="company_name">Shenzhen Feasycom Technology Co.,Ltd</string>
+    <string name="tel_number">+86-0755-23062695</string>
+    <string name="tel">Tel</string>
+    <string name="web">Web</string>
+    <string name="web_url">www.feasycom.com</string>
+    <string name="mail">E-mail</string>
+    <string name="mail_addr">support@feasycom.com</string>
+    <string name="Facebook">Facebook</string>
+    <string name="FaceBook_addr">Feasycom</string>
+    <string name="appVersion">Version</string>
+
+
+    // header
+    <string name="back">&#60; Back</string>
+    <string name="save">Save</string>
+    <string name="parameter_setting_title">Parameter Setting</string>
+    <string name="update">Update </string>
+    <string name="add_beacon_title">Add Beacon</string>
+    <string name="add_beacon_right">Finish</string>
+
+    // Function
+    Password
+    <string name="hint_input_PIN"></string>
+    //下拉刷新
+    <string name="pull_to_refresh">Pull to refresh</string>
+    <string name="release_to_refresh">Release to refresh</string>
+    <string name="refreshing">Refreshing</string>
+    <string name="not_updated_yet">Do not updated yet</string>
+    <string name="updated_at">Updated at %1$s</string>
+    <string name="updated_just_now">Updated just now</string>
+    <string name="time_error">Time error</string>
+
+
+    // 参数修改
+    //版本消息
+    <string name="version_name">3.1.5</string>
+    <string name="version_update">Get the newest version</string>
+    //设备过滤
+
+    //OTA
+    <string name="otaFile">File: </string>
+    <string name="module">Module</string>
+    <string name="appVwesion">AppVersion</string>
+    <string name="blVwesion">BLVersion</string>
+    <string name="current">Current</string>
+    <string name="except">New</string>
+    <string name="rest">Rest</string>
+    <string name="start">Start</string>
+    <string name="selectFile">SelectFile</string>
+    <string name="title_activity_filter_device">FilterDeviceActivity</string>
+    <string name="minimum_rssi">Minimum RSSI:</string>
+    <string name="title_beacons">Beacons</string>
+    <string name="title_map">Map</string>
+    <string name="title_rssi">Rssi</string>
+    <string name="title_mac">Address</string>
+    <string name="chargeDescription">Charge</string>
+    <string name="title_name">Name</string>
+    <string name="title_about">About</string>
+    <string name="change_name">Change Name</string>
+
+
+</resources>

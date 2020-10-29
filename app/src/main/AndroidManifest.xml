@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.feasycom.fsybecon">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="InnerclassSeparator"
+    package="com.magna.moldingtools">
 
-    <!-- 蓝牙SPP权限 -->
+    <!-- Bluetooth SPP permissions-->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <!-- for 三星 -->
+    <!-- for Samsung -->
     <permission
         android:name="android.permission.INTERACT_ACROSS_USERS_FULL"
         android:protectionLevel="signature" />
-    <!-- 蓝牙BLE权限 -->
+    <!-- Bluetooth BLE permission -->
     <uses-feature android:name="android.hardware.bluetooth_le" />
 
-    <!-- 安卓6蓝牙权限，必须打开定位权限 -->
+    <!-- Android 6 Bluetooth permission, location permission must be turned on -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <!--    <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />-->
-    <!-- 系统对话框权限 -->
+    <!-- System dialog permissions -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <!-- 文件数据权限 -->
+    <!-- File data permissions-->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -28,18 +30,17 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="android.max_aspect"
             android:value="2.1" />
 
         <activity
-            android:name=".Activity.AdvertisingActivity"
+            android:name=".Activity.LaunchActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.notAnimation">
+             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -49,46 +50,22 @@
             android:theme="@style/Theme.notAnimation"
             android:windowSoftInputMode="adjustPan" />
 
+
         <service
-            android:name="com.magna.beaconlibrary.service.AtCommandService"
+            android:name="com.magna.moldingtools.service.AtCommandService"
             android:enabled="true"
             android:exported="true" />
         <service
-            android:name="com.magna.beaconlibrary.service.OTASPPService"
+            android:name="com.magna.moldingtools.service.OTASPPService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity
-            android:name=".Activity.SetActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.notAnimation"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".Activity.SensorActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.notAnimation"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".Activity.AboutActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.notAnimation" />
-        <activity
-            android:name=".Activity.AddBeaconActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.notAnimation" />
+
         <activity
             android:name=".Activity.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.notAnimation" />
-        <activity
-            android:name=".Activity.UpgradeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.notAnimation" />
-        <activity android:name=".Activity.GuideActivity" />
-        <activity
-            android:name=".Activity.FilterDeviceActivity"
-            android:label="@string/title_activity_filter_device"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
     </application>
 
 </manifest>

@@ -1,0 +1,41 @@
+{
+    "project_info": {
+        "project_number": "1082189559987",
+        "firebase_url": "https://molding-tool-tracking.firebaseio.com",
+        "project_id": "molding-tool-tracking",
+        "storage_bucket": "molding-tool-tracking.appspot.com"
+    },
+    "client": [{
+        "client_info": {
+            "mobilesdk_app_id": "1:1082189559987:android:831d0c5e6742eeef9c18c6",
+            "android_client_info": {
+                "package_name": "com.magna.moldingtools"
+            }
+        },
+        "oauth_client": [{
+                "client_id": "1082189559987-pq4udklfuue9n9v84au845n21dtjumci.apps.googleusercontent.com",
+                "client_type": 1,
+                "android_info": {
+                    "package_name": "com.magna.moldingtools",
+                    "certificate_hash": "a24bfc6037e9a8539502d44c5a5cd271d1fc5016"
+                }
+            },
+            {
+                "client_id": "1082189559987-kt6estq5umt50apl274qk2u557ade11i.apps.googleusercontent.com",
+                "client_type": 3
+            }
+        ],
+        "api_key": [{
+            "current_key": "AIzaSyDZHux7htVo3Mur1dASaR_hC_LUCr19jFY"
+        }],
+        "services": {
+            "appinvite_service": {
+                "other_platform_oauth_client": [{
+                    "client_id": "1082189559987-kt6estq5umt50apl274qk2u557ade11i.apps.googleusercontent.com",
+                    "client_type": 3
+                }]
+            }
+        }
+    }],
+    "configuration_version": "1"
+}

@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="primaryColor">#F44336</color>
+    <color name="darkPrimaryColor">#D32F2F</color>
+    <color name="lightPrimaryColor">#FFCDD2</color>
+    <color name="textIconColor">#FFFFFF</color>
+    <color name="accentColor">#9E9E9E</color>
+    <color name="primaryTextColor">#212121</color>
+    <color name="secondaryTextColor">#757575</color>
+    <color name="dividerColor">#BDBDBD</color>
 
     //状态栏
     //底栏
+
 
     <color name="text_color_blue">#005fff</color>
 

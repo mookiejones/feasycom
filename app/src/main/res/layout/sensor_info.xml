@@ -1,0 +1,106 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:clickable="true"
+    android:id="@+id/deviceCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/card_margin"
+    card_view:cardCornerRadius="@dimen/card_radius">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_name"
+                style="@style/Beacon_Addr_Mac_TV"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:text="@string/title_name"
+
+
+                android:textColor="@color/setting_name" />
+
+            <ImageView
+                android:id="@+id/charge_pic"
+                android:layout_width="30dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/chargeDescription"
+
+                android:src="@drawable/electric_quantity" />
+
+            <TextView
+                android:id="@+id/charge_value"
+                android:layout_width="35dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:gravity="end"
+                android:text="65%"
+                android:textColor="@color/about_text"
+
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_mac"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:hint="@string/title_mac"
+                android:text="@string/title_mac"
+                android:textColor="@color/setting_mac" />
+
+            <TextView
+
+                android:id="@+id/tv_addr"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textColor="@color/setting_mac" />
+
+
+            <TextView
+                android:id="@+id/titleRssi"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/title_rssi" />
+
+
+            <TextView
+                android:id="@+id/tv_rssi"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="-64"
+                android:textColor="@color/setting_rssi" />
+
+        </LinearLayout>
+
+
+        <ProgressBar
+            android:id="@+id/pb_rssi"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:paddingTop="7dp"
+            android:paddingBottom="5dp"
+            android:progressDrawable="@drawable/progressbar" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

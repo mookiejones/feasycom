@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_beacons"
+        android:icon="@drawable/sensor_on"
+        android:title="@string/title_beacons" />
+
+    <item
+        android:id="@+id/navigation_map"
+        android:icon="@drawable/search_on"
+        android:title="@string/title_map" />
+
+
+
+</menu>
